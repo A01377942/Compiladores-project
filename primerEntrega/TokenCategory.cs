@@ -1,5 +1,6 @@
 /*
 Zabdiel Valentin A01377950
+Emiliano Javier Gómez Jiménez A01377235
 */
 
 namespace Buttercup
@@ -10,16 +11,19 @@ namespace Buttercup
         AND,
         ASSIGN,
         BOOL,
-        END,
-        EOF,
+        DEC,
+        ELIF,
+        ELSE,
         FALSE,
         IDENTIFIER,
         IF,
+        INC,
         INT,
         INT_LITERAL,
         LESS,
         MUL,
-        NEG,
+        NOT,
+        OR,
         PARENTHESIS_OPEN,
         PARENTHESIS_CLOSE,
         PLUS,
