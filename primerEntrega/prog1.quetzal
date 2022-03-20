@@ -5,11 +5,18 @@
 //Ejemplo de comentario 1
 //Ejemplo comentario 2
 main() {
-    var start, finish;
+    var _start, finish;
     start = 0;
+    character = 'a';
+    a = 1 <= 2;
+    array = []
+    numero = -12312312312;
     finish = 5;
     inc start;
     dec finish;
+    loop {
+
+    }
     prints("hello, world\n");
     return 42;
 }

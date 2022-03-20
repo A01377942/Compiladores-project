@@ -19,32 +19,39 @@ namespace Buttercup
             @"
                 (?<MultiLineComment>    [/][*](.|\n)*?[*][/] )
               | (?<Comment>    [/][/].*   )
+              | (?<String>      [""]([^""\n\\]|(\\([nrt\\'""]|u[0-9a-fA-F]{6})))*[""] )
+              | (?<Character>      [']([^'\n\\]|(\\([nrt\\'""]|u[0-9a-fA-F]{6})))*['] )
               | (?<Newline>    \n        )
               | (?<WhiteSpace> \s        )     # Must go after Newline.
+              | (?<Coma>        [,]       )
+              | (?<LeftSquareBracket>  [[] )
+              | (?<RightSquareBracket>  ] )
+              | (?<LessEqualThan>   [<][=]  )
               | (?<Less>       [<]       )
               | (?<Plus>       [+]       )
               | (?<Mul>        [*]       )
-              | (?<Neg>        [-]       )
               | (?<ParLeft>    [(]       )
               | (?<ParRight>   [)]       )
+              | (?<CurlyLeft>  [{]       )
+              | (?<CurlyRight> [}]       )
               | (?<Assign>     [=]       )
               | (?<True>       [#]t      )
               | (?<False>      [#]f      )   
-              | (?<IntLiteral> \d+       )
+              | (?<IntLiteral> [-]?\d+       )
               | (?<Dec>        dec\b     )
               | (?<Inc>        inc\b     )
               | (?<And>        and\b     )
-              | (?<Bool>       bool\b    )
               | (?<Or>         or\b      )
               | (?<Not>        not\b     ) 
-              | (?<End>        end\b     )
               | (?<If>         if\b      )
               | (?<Elif>       elif\b    )
               | (?<Else>       else\b    )
-              | (?<Int>        int\b     )
               | (?<Print>      print\b   )
-              | (?<Then>       then\b    )
-              | (?<Identifier> [a-zA-Z]+ )     # Must go after all keywords
+              | (?<Loop>       loop\b    )
+              | (?<Break>      break\b   )
+              | (?<Return>      return\b   )
+              | (?<EndOfLine>      ;   )
+              | (?<Identifier> [a-zA-Z_]\w* )     # Must go after all keywords
               | (?<Other>      .         )     # Must be last: match any other character.
             ",
             RegexOptions.IgnorePatternWhitespace
@@ -54,29 +61,36 @@ namespace Buttercup
 
         static readonly IDictionary<string, TokenCategory> tokenMap =
             new Dictionary<string, TokenCategory>() {
+                {"String", TokenCategory.STRING},
+                {"Character", TokenCategory.CHARACTER},
+                {"Coma", TokenCategory.COMA},
+                {"LeftSquareBracket", TokenCategory.LEFT_SQUARE_BRACKET},
+                {"RightSquareBracket", TokenCategory.RIGHT_SQUARE_BRACKET},
                 {"And", TokenCategory.AND},
+                {"LessEqualThan", TokenCategory.LESS_EQUAL_THAN},
                 {"Less", TokenCategory.LESS},
                 {"Plus", TokenCategory.PLUS},
                 {"Mul", TokenCategory.MUL},
-                {"Neg", TokenCategory.NEG},
                 {"ParLeft", TokenCategory.PARENTHESIS_OPEN},
                 {"ParRight", TokenCategory.PARENTHESIS_CLOSE},
+                {"CurlyLeft", TokenCategory.LEFT_CURLY_BRACE},
+                {"CurlyRight", TokenCategory.RIGHT_CURLY_BRACE},
                 {"Assign", TokenCategory.ASSIGN},
                 {"True", TokenCategory.TRUE},
                 {"False", TokenCategory.FALSE},
                 {"IntLiteral", TokenCategory.INT_LITERAL},
                 {"Dec", TokenCategory.DEC},
                 {"Inc", TokenCategory.INC},
-                {"Bool", TokenCategory.BOOL},
                 {"Or", TokenCategory.OR},
                 {"Not", TokenCategory.NOT},
-                {"End", TokenCategory.END},
                 {"If", TokenCategory.IF},
                 {"Elif", TokenCategory.ELIF},
                 {"Else", TokenCategory.ELSE},
-                {"Int", TokenCategory.INT},
                 {"Print", TokenCategory.PRINT},
-                {"Then", TokenCategory.THEN},
+                 {"Loop", TokenCategory.LOOP},
+                {"Break", TokenCategory.BREAK},
+                {"Return", TokenCategory.RETURN},
+                {"EndOfLine", TokenCategory.END_OF_LINE},
                 {"Identifier", TokenCategory.IDENTIFIER}
             };
 
