@@ -21,7 +21,6 @@ namespace Buttercup
               | (?<Comment>    [/][/].*   )
               | (?<Newline>    \n        )
               | (?<WhiteSpace> \s        )     # Must go after Newline.
-              | (?<And>        [&]       )
               | (?<Less>       [<]       )
               | (?<Plus>       [+]       )
               | (?<Mul>        [*]       )
@@ -30,11 +29,18 @@ namespace Buttercup
               | (?<ParRight>   [)]       )
               | (?<Assign>     [=]       )
               | (?<True>       [#]t      )
-              | (?<False>      [#]f      )
+              | (?<False>      [#]f      )   
               | (?<IntLiteral> \d+       )
+              | (?<Dec>        dec\b     )
+              | (?<Inc>        inc\b     )
+              | (?<And>        and\b     )
               | (?<Bool>       bool\b    )
+              | (?<Or>         or\b      )
+              | (?<Not>        not\b     ) 
               | (?<End>        end\b     )
               | (?<If>         if\b      )
+              | (?<Elif>       elif\b    )
+              | (?<Else>       else\b    )
               | (?<Int>        int\b     )
               | (?<Print>      print\b   )
               | (?<Then>       then\b    )
@@ -59,9 +65,15 @@ namespace Buttercup
                 {"True", TokenCategory.TRUE},
                 {"False", TokenCategory.FALSE},
                 {"IntLiteral", TokenCategory.INT_LITERAL},
+                {"Dec", TokenCategory.DEC},
+                {"Inc", TokenCategory.INC},
                 {"Bool", TokenCategory.BOOL},
+                {"Or", TokenCategory.OR},
+                {"Not", TokenCategory.NOT},
                 {"End", TokenCategory.END},
                 {"If", TokenCategory.IF},
+                {"Elif", TokenCategory.ELIF},
+                {"Else", TokenCategory.ELSE},
                 {"Int", TokenCategory.INT},
                 {"Print", TokenCategory.PRINT},
                 {"Then", TokenCategory.THEN},
