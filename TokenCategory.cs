@@ -30,6 +30,9 @@ namespace QuetzalDragon{
         RIGHT_SQUARE_BRACKET,
         LEFT_CURLY_BRACE,
         RIGHT_CURLY_BRACE,
+
+        PARENTHESIS_OPEN,
+        PARENTHESIS_CLOSE,
         PLUS,
         LESS,
         MULTIPLICATION,
@@ -42,8 +45,9 @@ namespace QuetzalDragon{
         LESS_THAN,
         GREATHER_EQUAL_THAN,
         LESS_EQUAL_THAN,
-        COMMENT,
-        MULTI_LINE_COMMENT,
+        SUBSTRACTION,
+        VAR,
+        ILLEGAL_CHAR,
     }
 
 } 
