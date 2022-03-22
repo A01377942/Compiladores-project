@@ -8,8 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace QuetzalDragon{
-    
+namespace QuetzalDragon
+{
+
     class Scanner
     {
 
@@ -20,7 +21,7 @@ namespace QuetzalDragon{
                 (?<MultiLineComment>    [/][*](.|\n)*?[*][/] )
               | (?<Comment>    [/][/].*   )   
               | (?<String>      [""]([^""\n\\]|(\\([nrt\\'""]|u[0-9a-fA-F]{6})))*[""] )
-              | (?<Character>      [']([^'\n\\]|(\\([nrt\\'""]|u[0-9a-fA-F]{6})))*['] )
+              | (?<Character>      [']([^'\n\\]|(\\([nrt\\'""]|u[0-9a-fA-F]{6})))['] )
               | (?<Newline>    \n        )
               | (?<WhiteSpace> \s        ) 
               | (?<Coma>        [,]       )
@@ -42,8 +43,8 @@ namespace QuetzalDragon{
               | (?<CurlyRight> [}]       )
               | (?<EqualTo>     [=][=]    )
               | (?<Assign>     [=]       )
-              | (?<True>       [#]t      )
-              | (?<False>      [#]f      )   
+              | (?<True>       true\b      )
+              | (?<False>      false\b      )   
               | (?<IntLiteral> [-]?\d+   )
               | (?<Var>        var\b     )
               | (?<Dec>        dec\b     )
