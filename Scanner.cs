@@ -1,3 +1,9 @@
+/*
+Zabdiel Valentin A01377950
+Emiliano Javier Gómez Jiménez A01377235
+Luis Jonathan Rosas Ramos A01377942
+*/
+
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;

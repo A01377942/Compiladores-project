@@ -1,5 +1,7 @@
 /*
-    
+Zabdiel Valentin A01377950
+Emiliano Javier Gómez Jiménez A01377235
+Luis Jonathan Rosas Ramos A01377942
 */
 
 namespace QuetzalDragon{
