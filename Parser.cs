@@ -146,7 +146,141 @@ namespace QuetzalDragon
 
         public void Stmt_List()
         {
+            while (stmt_Values.Contains(CurrentToken))
+            {
+                Stmt();
+            }
+        }
+
+        public void Stmt()
+        {
+            switch (CurrentToken)
+            {
+
+                case TokenCategory.IDENTIFIER:
+                    Expect(TokenCategory.IDENTIFIER);
+                    switch (CurrentToken)
+                    {
+                        case TokenCategory.ASSIGN:
+                            Expect(TokenCategory.ASSIGN);
+                            Expr();
+                            Expect(TokenCategory.END_OF_LINE);
+                            break;
+                        case TokenCategory.PARENTHESIS_OPEN:
+                            Expect(TokenCategory.PARENTHESIS_OPEN);
+                            Expr_List();
+                            Expect(TokenCategory.PARENTHESIS_CLOSE);
+                            Expect(TokenCategory.END_OF_LINE);
+                            break;
+                        default:
+                            throw new SyntaxError(def_Values,
+                                                tokenStream.Current);
+
+                    }
+                    break;
+
+                case TokenCategory.INC:
+                    Stmt_Incr();
+                    break;
+                case TokenCategory.DEC:
+                    Stmt_Decr();
+                    break;
+                case TokenCategory.IF:
+                    Stmt_If();
+                    break;
+                case TokenCategory.LOOP:
+                    Stmp_Loop();
+                    break;
+                case TokenCategory.BREAK:
+                    Stmp_Break();
+                    break;
+                case TokenCategory.RETURN:
+                    Stmp_Return();
+                    break;
+                case TokenCategory.END_OF_LINE:
+                    Expect(TokenCategory.END_OF_LINE);
+                    break;
+
+                default:
+                    throw new SyntaxError(def_Values,
+                                        tokenStream.Current);
+
+            }
+        }
+
+
+        public void Stmt_Incr()
+        {
+            Expect(TokenCategory.INC);
+            Expect(TokenCategory.IDENTIFIER);
+            Expect(TokenCategory.END_OF_LINE);
+        }
+
+        public void Stmt_Decr()
+        {
+            Expect(TokenCategory.DEC);
+            Expect(TokenCategory.IDENTIFIER);
+            Expect(TokenCategory.END_OF_LINE);
+        }
+
+        public void Stmt_If()
+        {
+            Expect(TokenCategory.IF);
+            Expect(TokenCategory.PARENTHESIS_OPEN);
+            Expr();
+            Expect(TokenCategory.PARENTHESIS_CLOSE);
+            Expect(TokenCategory.LEFT_CURLY_BRACE);
+            Stmt_List();
+            Expect(TokenCategory.RIGHT_CURLY_BRACE);
+            Else_If_List();
+            Else();
+        }
+        public void Else_If_List()
+        {
+
+            while (CurrentToken == TokenCategory.ELIF)
+            {
+                Expect(TokenCategory.ELIF);
+                Expect(TokenCategory.PARENTHESIS_OPEN);
+                Expr();
+                Expect(TokenCategory.PARENTHESIS_CLOSE);
+                Expect(TokenCategory.LEFT_CURLY_BRACE);
+                Stmt_List();
+                Expect(TokenCategory.RIGHT_CURLY_BRACE);
+            }
+        }
+
+        public void Else()
+        {
 
         }
+
+        public void Stmp_Loop()
+        {
+
+        }
+        public void Stmp_Break()
+        {
+
+        }
+
+        public void Stmp_Return()
+        {
+
+        }
+
+        public void Expr_List()
+        {
+
+        }
+        public void Expr_List_Cont()
+        {
+
+        }
+        public void Expr()
+        {
+
+        }
+
     }
 }
