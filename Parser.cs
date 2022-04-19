@@ -252,26 +252,38 @@ namespace QuetzalDragon
 
         public void Else()
         {
-
+            while (CurrentToken == TokenCategory.ELSE)
+            {
+                Expect(TokenCategory.ELSE);
+                Expect(TokenCategory.LEFT_CURLY_BRACE);
+                Stmt_List();
+                Expect(TokenCategory.RIGHT_CURLY_BRACE);
+            }
         }
 
         public void Stmp_Loop()
         {
-
+            Expect(TokenCategory.LOOP);
+            Expect(TokenCategory.LEFT_CURLY_BRACE);
+            Stmt_List();
+            Expect(TokenCategory.RIGHT_CURLY_BRACE);
         }
         public void Stmp_Break()
         {
-
+            Expect(TokenCategory.BREAK);
+            Expect(TokenCategory.END_OF_LINE);
         }
 
         public void Stmp_Return()
         {
-
+            Expect(TokenCategory.RETURN);
+            Expr();
+            Expect(TokenCategory.END_OF_LINE);
         }
 
         public void Expr_List()
         {
-
+            
         }
         public void Expr_List_Cont()
         {
