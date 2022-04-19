@@ -294,5 +294,113 @@ namespace QuetzalDragon
 
         }
 
+        public void Expr_rel(){
+            Expr_add();
+            switch(CurrentToken){
+                case TokenCategory.LESS_THAN:
+                    Expect(TokenCategory.LESS_THAN);
+                    Expr_rel();
+                    break;
+                case TokenCategory.LESS_EQUAL_THAN:
+                    Expect(TokenCategory.LESS_EQUAL_THAN);
+                    Expr_rel();
+                    break;
+                case TokenCategory.GREATHER_THAN:
+                    Expect(TokenCategory.GREATHER_THAN);
+                    Expr_rel();
+                    break;
+                case TokenCategory.GREATHER_EQUAL_THAN:
+                    Expect(TokenCategory.GREATHER_EQUAL_THAN);
+                    Expr_rel();
+                    break;
+                default:
+                    throw new SyntaxError(def_Values,tokenStream.Current);
+            }
+        }
+
+        public void Expr_add(){
+            Expr_mul();
+            switch(CurrentToken){
+                case TokenCategory.PLUS:
+                    Expect(TokenCategory.PLUS);
+                    Expr_add();
+                    break;
+                case TokenCategory.SUBSTRACTION:
+                    Expect(TokenCategory.SUBSTRACTION);
+                    Expr_add();
+                    break;
+                default:
+                    throw new SyntaxError(def_Values, tokenStream.Current);
+            }
+        }
+
+        public void Expr_mul(){
+            Expr_unary();
+            switch(CurrentToken){
+                case TokenCategory.MULTIPLICATION:
+                    Expect(TokenCategory.MULTIPLICATION);
+                    Expr_mul();
+                    break;
+                case TokenCategory.DIVISION:
+                    Expect(TokenCategory.DIVISION);
+                    Expr_mul();
+                    break;
+                case TokenCategory.REMINDER:
+                    Expect(TokenCategory.REMINDER);
+                    Expr_mul();
+                    break;
+                default:
+                    throw new SyntaxError(def_Values, tokenStream.Current);
+            }
+        }
+
+        public void Expr_unary(){
+            switch(CurrentToken){
+                case TokenCategory.PLUS:
+                    Expect(TokenCategory.PLUS);
+                    Expr_unary();
+                    break;
+                case TokenCategory.SUBSTRACTION:
+                    Expect(TokenCategory.SUBSTRACTION);
+                    Expr_unary();
+                    break;
+                case TokenCategory.NOT:
+                    Expect(TokenCategory.NOT);
+                    Expr_unary();
+                    break;
+                case TokenCategory.IDENTIFIER:
+                    Expect(TokenCategory.IDENTIFIER);
+                    if(CurrentToken==TokenCategory.PARENTHESIS_OPEN){
+                        Expect(TokenCategory.PARENTHESIS_OPEN);
+                        Expr_List();
+                        Expect(TokenCategory.PARENTHESIS_CLOSE);
+                    }
+                    break;
+                case TokenCategory.PARENTHESIS_OPEN:
+                    Expect(TokenCategory.PARENTHESIS_OPEN);
+                    Expr();
+                    Expect(TokenCategory.PARENTHESIS_CLOSE);
+                    break;
+                case TokenCategory.LEFT_SQUARE_BRACKET:
+                    Expect(TokenCategory.LEFT_SQUARE_BRACKET);
+                    Expr_List();
+                    Expect(TokenCategory.RIGHT_SQUARE_BRACKET);
+                    break;
+                case TokenCategory.TRUE:
+                    Expect(TokenCategory.TRUE);
+                    break;
+                case TokenCategory.FALSE:
+                    Expect(TokenCategory.FALSE);
+                    break;
+                case TokenCategory.CHARACTER:
+                    Expect(TokenCategory.CHARACTER);
+                    break;
+                case TokenCategory.STRING:
+                    Expect(TokenCategory.STRING);
+                    break;
+                default:
+                    throw new SyntaxError(def_Values, tokenStream.Current);
+            }
+        }
     }
 }
