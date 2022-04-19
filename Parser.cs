@@ -283,15 +283,50 @@ namespace QuetzalDragon
 
         public void Expr_List()
         {
-            
+            //TODO
         }
         public void Expr_List_Cont()
         {
-
+            while(CurrentToken == TokenCategory.COMA){
+                Expect(TokenCategory.COMA);
+                Expr();
+            }
         }
         public void Expr()
         {
+            Expr_Or();
+        }
 
+        public void Expr_Or(){
+            Expr_And();
+            while(CurrentToken == TokenCategory.OR){
+                Expect(TokenCategory.OR);
+                Expr_And();
+            }
+        }
+        
+        public void Expr_And(){
+            Expr_Comp();
+            while(CurrentToken == TokenCategory.AND){
+                Expect(TokenCategory.AND);
+                Expr_Comp();
+            }
+        }
+
+        public void Expr_Comp(){
+            Expr_rel();
+            switch(CurrentToken){
+                case TokenCategory.EQUAL_TO:
+                    Expect(TokenCategory.EQUAL_TO);
+                    Expr_rel();
+                    break;
+                case TokenCategory.NOT_EQUAL_TO:
+                    Expect(TokenCategory.NOT_EQUAL_TO);
+                    Expr_rel();
+                    break;
+                default:
+                    throw new SyntaxError(def_Values, tokenStream.Current);
+            }
         }
 
         public void Expr_rel(){
