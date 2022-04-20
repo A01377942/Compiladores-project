@@ -7,6 +7,47 @@ Luis Jonathan Rosas Ramos A01377942
 /*
  * QuetzalDragon LL(1) Grammar:
  *
+‹program› → ‹def-list› “EOF”
+‹def-list› →‹def›*
+‹def›→‹var-def› | ‹fun-def›
+‹var-def›→var ‹var-list› ;
+‹var-list›→‹id-list›
+‹id-list›→<id>(,<id>)*
+‹fun-def›→‹id› ( ‹id-list›? ) { ‹var-def›* ‹stmt-list›* }
+<stmt-list>›→<stmt>*
+‹stmt›→<id>(=<expr>; | (<expr-list>);) |<stmt-inc>|<stmt-dec>|<stmt-if>|‹stmt-loop›|‹stmt-break›|‹stmt-return›|‹stmt-empty›
+‹expr-list› →(‹expr› ‹expr-list-cont›)?
+‹expr-list-cont›→(, ‹expr›)*
+‹stmt-incr›→    inc ‹id› ;
+‹stmt-decr›→   dec ‹id› ; 
+<stmt-if>→if ( ‹expr› ) { ‹stmt-list› } ‹else-if-list› ‹else›
+‹else-if-list›→    ( elif ( ‹expr› ) { ‹stmt-list› })*
+
+‹else›→    ( else{ ‹stmt-list› })*
+‹stmt-loop›→    loop { ‹stmt-list› }
+‹stmt-break›→    break ;
+‹stmt-return›→    return ‹expr› ;
+‹stmt-empty›→    ;
+‹expr›→           ‹expr-or›
+‹expr-or›→       ‹expr-and› (or ‹expr-and›)*
+‹expr-and›→    ‹expr-comp› (and ‹expr-comp›)*
+
+‹expr-comp›→‹expr-rel›(‹op-comp› ‹expr-rel›)*
+‹op-comp›→    ==|!=
+
+‹expr-rel›→      ‹expr-add› (‹op-rel› ‹expr-add›)*
+‹op-rel›→         <|<=|>|>=
+‹expr-add›→    ‹expr-mul›(‹op-add› ‹expr-mul›)*
+‹op-add›→       +|−
+‹expr-mul›→    ‹expr-unary›(‹op-mul› ‹expr-unary›)*
+
+‹op-mul›→       *|/|%
+‹expr-unary›→ (‹op-unary›)*‹expr-primary›
+‹op-unary›→    +|−|not
+‹expr-primary›→          <id> (  (‹expr-list› ) )?|‹array›|‹lit›|( ‹expr› )
+‹array›→          [ ‹expr-list› ]
+‹lit›→   ‹lit-bool›|‹lit-int›|‹lit-char›|‹lit-str›
+
 
  */
 
@@ -37,6 +78,39 @@ namespace QuetzalDragon
                 TokenCategory.RETURN,
                 TokenCategory.END_OF_LINE
             };
+
+        static readonly ISet<TokenCategory> expr_Values =
+            new HashSet<TokenCategory>() {
+                TokenCategory.PLUS,
+                TokenCategory.SUBSTRACTION,
+                TokenCategory.NOT,
+                TokenCategory.IDENTIFIER,
+                TokenCategory.LEFT_SQUARE_BRACKET,
+                         TokenCategory.TRUE,
+             TokenCategory.FALSE,
+             TokenCategory.INT_LITERAL,
+             TokenCategory.CHARACTER,
+             TokenCategory.STRING
+
+            };
+
+        static readonly ISet<TokenCategory> Unary_Values =
+              new HashSet<TokenCategory>() {
+                TokenCategory.PLUS,
+                TokenCategory.SUBSTRACTION,
+                TokenCategory.NOT
+
+              };
+
+        static readonly ISet<TokenCategory> Lit_Values =
+              new HashSet<TokenCategory>() {
+             TokenCategory.TRUE,
+             TokenCategory.FALSE,
+             TokenCategory.INT_LITERAL,
+             TokenCategory.CHARACTER,
+             TokenCategory.STRING
+
+              };
 
         IEnumerator<Token> tokenStream;
 
@@ -136,6 +210,7 @@ namespace QuetzalDragon
         }
         public void ID_List()
         {
+
             Expect(TokenCategory.IDENTIFIER);
             while (CurrentToken == TokenCategory.COMA)
             {
@@ -159,9 +234,11 @@ namespace QuetzalDragon
 
                 case TokenCategory.IDENTIFIER:
                     Expect(TokenCategory.IDENTIFIER);
+
                     switch (CurrentToken)
                     {
                         case TokenCategory.ASSIGN:
+
                             Expect(TokenCategory.ASSIGN);
                             Expr();
                             Expect(TokenCategory.END_OF_LINE);
@@ -208,6 +285,17 @@ namespace QuetzalDragon
             }
         }
 
+        //‹expr-list› →(‹expr› ‹expr-list-cont›)?
+        public void Expr_List()
+        {
+            if (expr_Values.Contains(CurrentToken))
+            {
+
+                Expr();
+                Expr_List_Cont();
+            }
+
+        }
 
         public void Stmt_Incr()
         {
@@ -281,158 +369,237 @@ namespace QuetzalDragon
             Expect(TokenCategory.END_OF_LINE);
         }
 
-        public void Expr_List()
-        {
-            //TODO
-        }
         public void Expr_List_Cont()
         {
-            while(CurrentToken == TokenCategory.COMA){
+            while (CurrentToken == TokenCategory.COMA)
+            {
                 Expect(TokenCategory.COMA);
                 Expr();
             }
         }
         public void Expr()
         {
+
             Expr_Or();
         }
 
-        public void Expr_Or(){
+        public void Expr_Or()
+        {
+
             Expr_And();
-            while(CurrentToken == TokenCategory.OR){
+            while (CurrentToken == TokenCategory.OR)
+            {
                 Expect(TokenCategory.OR);
                 Expr_And();
             }
         }
-        
-        public void Expr_And(){
+
+        public void Expr_And()
+        {
             Expr_Comp();
-            while(CurrentToken == TokenCategory.AND){
+            while (CurrentToken == TokenCategory.AND)
+            {
                 Expect(TokenCategory.AND);
                 Expr_Comp();
             }
         }
-
-        public void Expr_Comp(){
+        //ERRORES
+        //‹expr-comp›→‹expr-rel›(‹op-comp› ‹expr-rel›)*
+        public void Expr_Comp()
+        {
             Expr_rel();
-            switch(CurrentToken){
+            while (CurrentToken == TokenCategory.EQUAL_TO || CurrentToken == TokenCategory.NOT_EQUAL_TO)
+            {
+                Op_Comp();
+                Expr_rel();
+            }
+
+        }
+
+        public void Op_Comp()
+        {
+
+            switch (CurrentToken)
+            {
                 case TokenCategory.EQUAL_TO:
                     Expect(TokenCategory.EQUAL_TO);
-                    Expr_rel();
                     break;
                 case TokenCategory.NOT_EQUAL_TO:
                     Expect(TokenCategory.NOT_EQUAL_TO);
-                    Expr_rel();
                     break;
                 default:
-                    throw new SyntaxError(def_Values, tokenStream.Current);
+                    throw new SyntaxError(TokenCategory.EQUAL_TO, tokenStream.Current);
             }
         }
 
-        public void Expr_rel(){
+
+        public void Expr_rel()
+        {
+
             Expr_add();
-            while(CurrentToken == TokenCategory.LESS_THAN || CurrentToken == TokenCategory.LESS_EQUAL_THAN 
-            || CurrentToken == TokenCategory.GREATHER_THAN || CurrentToken == TokenCategory.GREATHER_EQUAL_THAN){
-                switch(CurrentToken){
+            while (CurrentToken == TokenCategory.LESS_THAN || CurrentToken == TokenCategory.LESS_EQUAL_THAN
+            || CurrentToken == TokenCategory.GREATHER_THAN || CurrentToken == TokenCategory.GREATHER_EQUAL_THAN)
+            {
+                switch (CurrentToken)
+                {
                     case TokenCategory.LESS_THAN:
                         Expect(TokenCategory.LESS_THAN);
-                        Expr_rel();
+                        Expr_add();
                         break;
                     case TokenCategory.LESS_EQUAL_THAN:
                         Expect(TokenCategory.LESS_EQUAL_THAN);
-                        Expr_rel();
+                        Expr_add();
                         break;
                     case TokenCategory.GREATHER_THAN:
                         Expect(TokenCategory.GREATHER_THAN);
-                        Expr_rel();
+                        Expr_add();
                         break;
                     case TokenCategory.GREATHER_EQUAL_THAN:
                         Expect(TokenCategory.GREATHER_EQUAL_THAN);
-                        Expr_rel();
+                        Expr_add();
                         break;
                     default:
-                        throw new SyntaxError(def_Values,tokenStream.Current);
+                        throw new SyntaxError(TokenCategory.LESS_THAN, tokenStream.Current);
                 }
             }
         }
 
-        public void Expr_add(){
+        public void Expr_add()
+        {
             Expr_mul();
-            while(CurrentToken == TokenCategory.PLUS || CurrentToken == TokenCategory.SUBSTRACTION){
-                switch(CurrentToken){
+            while (CurrentToken == TokenCategory.PLUS || CurrentToken == TokenCategory.SUBSTRACTION)
+            {
+                switch (CurrentToken)
+                {
                     case TokenCategory.PLUS:
                         Expect(TokenCategory.PLUS);
-                        Expr_add();
+                        Expr_mul();
                         break;
                     case TokenCategory.SUBSTRACTION:
                         Expect(TokenCategory.SUBSTRACTION);
-                        Expr_add();
+                        Expr_mul();
                         break;
                     default:
-                        throw new SyntaxError(def_Values, tokenStream.Current);
+                        throw new SyntaxError(TokenCategory.PLUS, tokenStream.Current);
                 }
             }
         }
 
-        public void Expr_mul(){
+        public void Expr_mul()
+        {
             Expr_unary();
-            while(CurrentToken == TokenCategory.MULTIPLICATION || CurrentToken == TokenCategory.DIVISION || CurrentToken == TokenCategory.REMINDER){
-                switch(CurrentToken){
+            while (CurrentToken == TokenCategory.MULTIPLICATION || CurrentToken == TokenCategory.DIVISION || CurrentToken == TokenCategory.REMINDER)
+            {
+                switch (CurrentToken)
+                {
                     case TokenCategory.MULTIPLICATION:
                         Expect(TokenCategory.MULTIPLICATION);
-                        Expr_mul();
+                        Expr_unary();
                         break;
                     case TokenCategory.DIVISION:
                         Expect(TokenCategory.DIVISION);
-                        Expr_mul();
+                        Expr_unary();
                         break;
                     case TokenCategory.REMINDER:
                         Expect(TokenCategory.REMINDER);
-                        Expr_mul();
+                        Expr_unary();
                         break;
                     default:
-                        throw new SyntaxError(def_Values, tokenStream.Current);
+                        throw new SyntaxError(TokenCategory.MULTIPLICATION, tokenStream.Current);
                 }
             }
         }
 
-        public void Expr_unary(){
-            switch(CurrentToken){
+        public void Expr_unary()
+        {
+            while (Unary_Values.Contains(CurrentToken))
+            {
+                Op_unary();
+            }
+            Expr_Primary();
+        }
+
+        public void Op_unary()
+        {
+            switch (CurrentToken)
+            {
                 case TokenCategory.PLUS:
                     Expect(TokenCategory.PLUS);
-                    Expr_unary();
                     break;
                 case TokenCategory.SUBSTRACTION:
                     Expect(TokenCategory.SUBSTRACTION);
-                    Expr_unary();
                     break;
                 case TokenCategory.NOT:
                     Expect(TokenCategory.NOT);
-                    Expr_unary();
                     break;
+                default:
+                    throw new SyntaxError(Unary_Values, tokenStream.Current);
+            }
+        }
+
+        public void Expr_Primary()
+        {
+            switch (CurrentToken)
+            {
                 case TokenCategory.IDENTIFIER:
                     Expect(TokenCategory.IDENTIFIER);
-                    if(CurrentToken==TokenCategory.PARENTHESIS_OPEN){
+                    if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
+                    {
+
                         Expect(TokenCategory.PARENTHESIS_OPEN);
+
                         Expr_List();
+
                         Expect(TokenCategory.PARENTHESIS_CLOSE);
+
                     }
                     break;
-                case TokenCategory.PARENTHESIS_OPEN:
-                    Expect(TokenCategory.PARENTHESIS_OPEN);
-                    Expr();
-                    Expect(TokenCategory.PARENTHESIS_CLOSE);
-                    break;
                 case TokenCategory.LEFT_SQUARE_BRACKET:
-                    Expect(TokenCategory.LEFT_SQUARE_BRACKET);
-                    Expr_List();
-                    Expect(TokenCategory.RIGHT_SQUARE_BRACKET);
+                    Array();
                     break;
                 case TokenCategory.TRUE:
                     Expect(TokenCategory.TRUE);
                     break;
                 case TokenCategory.FALSE:
                     Expect(TokenCategory.FALSE);
+                    break;
+                case TokenCategory.INT_LITERAL:
+                    Expect(TokenCategory.INT_LITERAL);
+                    break;
+                case TokenCategory.CHARACTER:
+                    Expect(TokenCategory.CHARACTER);
+                    break;
+                case TokenCategory.STRING:
+                    Expect(TokenCategory.STRING);
+                    break;
+                case TokenCategory.PARENTHESIS_OPEN:
+                    Expect(TokenCategory.PARENTHESIS_OPEN);
+                    Expr();
+                    Expect(TokenCategory.PARENTHESIS_CLOSE);
+                    break;
+                default:
+                    throw new SyntaxError(Lit_Values, tokenStream.Current);
+            }
+        }
+        public void Array()
+        {
+            Expect(TokenCategory.LEFT_SQUARE_BRACKET);
+            Expr_List();
+            Expect(TokenCategory.RIGHT_SQUARE_BRACKET);
+        }
+
+        public void Lit()
+        {
+            switch (CurrentToken)
+            {
+                case TokenCategory.TRUE:
+                    Expect(TokenCategory.TRUE);
+                    break;
+                case TokenCategory.FALSE:
+                    Expect(TokenCategory.FALSE);
+                    break;
+                case TokenCategory.INT_LITERAL:
+                    Expect(TokenCategory.INT_LITERAL);
                     break;
                 case TokenCategory.CHARACTER:
                     Expect(TokenCategory.CHARACTER);
@@ -441,8 +608,11 @@ namespace QuetzalDragon
                     Expect(TokenCategory.STRING);
                     break;
                 default:
-                    throw new SyntaxError(def_Values, tokenStream.Current);
+                    throw new SyntaxError(Lit_Values, tokenStream.Current);
             }
         }
+
+
+
     }
 }
