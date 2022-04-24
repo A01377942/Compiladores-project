@@ -17,7 +17,7 @@ Luis Jonathan Rosas Ramos A01377942
 <stmt-list>›→<stmt>*
 ‹stmt›→<id>(=<expr>; | (<expr-list>);) |<stmt-inc>|<stmt-dec>|<stmt-if>|‹stmt-loop›|‹stmt-break›|‹stmt-return›|‹stmt-empty›
 ‹expr-list› →(‹expr› ‹expr-list-cont›)?
-‹expr-list-cont›→(, ‹expr›)*
+‹expr-list-cont›→ (,<expr> <expr-list-cont>)?
 ‹stmt-incr›→    inc ‹id› ;
 ‹stmt-decr›→   dec ‹id› ; 
 <stmt-if>→if ( ‹expr› ) { ‹stmt-list› } ‹else-if-list› ‹else›
@@ -92,6 +92,20 @@ namespace QuetzalDragon
              TokenCategory.CHARACTER,
              TokenCategory.STRING
 
+            };
+
+        static readonly ISet<TokenCategory> expr_Primary_Values =
+            new HashSet<TokenCategory>() {
+                TokenCategory.IDENTIFIER,
+                TokenCategory.LEFT_SQUARE_BRACKET,
+                         TokenCategory.TRUE,
+             TokenCategory.FALSE,
+             TokenCategory.INT_LITERAL,
+             TokenCategory.CHARACTER,
+             TokenCategory.STRING,
+         TokenCategory.PLUS,
+                TokenCategory.SUBSTRACTION,
+                TokenCategory.NOT
             };
 
         static readonly ISet<TokenCategory> Unary_Values =
@@ -369,12 +383,27 @@ namespace QuetzalDragon
             Expect(TokenCategory.END_OF_LINE);
         }
 
-        public void Expr_List_Cont()
+        /*
+        Anterior:
+        ‹expr-list-cont›→(, ‹expr›)*
+                public void Expr_List_Cont()
         {
             while (CurrentToken == TokenCategory.COMA)
             {
                 Expect(TokenCategory.COMA);
                 Expr();
+            }
+        }
+        
+        */
+        //Ahora: ‹expr-list-cont›→ (,<expr> <expr-list-cont>)?
+        public void Expr_List_Cont()
+        {
+            if (CurrentToken == TokenCategory.COMA)
+            {
+                Expect(TokenCategory.COMA);
+                Expr();
+                Expr_List_Cont();
             }
         }
         public void Expr()
@@ -403,7 +432,7 @@ namespace QuetzalDragon
                 Expr_Comp();
             }
         }
-        //ERRORES
+
         //‹expr-comp›→‹expr-rel›(‹op-comp› ‹expr-rel›)*
         public void Expr_Comp()
         {
@@ -510,13 +539,60 @@ namespace QuetzalDragon
             }
         }
 
-        public void Expr_unary()
+        /*
+        Antes:
+        ‹expr-unary›→ (‹op-unary›)*‹expr-primary›
+      public void Expr_unary()
         {
             while (Unary_Values.Contains(CurrentToken))
             {
                 Op_unary();
             }
             Expr_Primary();
+        }
+        */
+        //Ahora:
+        //‹expr-unary›→ ‹op-unary›‹expr-unary› |‹expr-primary›
+        public void Expr_unary()
+        {
+            switch (CurrentToken)
+            {
+                case TokenCategory.PLUS:
+                    Op_unary();
+                    Expr_unary();
+                    break;
+                case TokenCategory.SUBSTRACTION:
+                    Op_unary();
+                    Expr_unary();
+                    break;
+                case TokenCategory.NOT:
+                    Op_unary();
+                    Expr_unary();
+                    break;
+                case TokenCategory.IDENTIFIER:
+                    Expr_Primary();
+                    break;
+                case TokenCategory.LEFT_SQUARE_BRACKET:
+                    Expr_Primary();
+                    break;
+                case TokenCategory.TRUE:
+                    Expr_Primary();
+                    break;
+                case TokenCategory.FALSE:
+                    Expr_Primary();
+                    break;
+                case TokenCategory.INT_LITERAL:
+                    Expr_Primary();
+                    break;
+                case TokenCategory.CHARACTER:
+                    Expr_Primary();
+                    break;
+                case TokenCategory.STRING:
+                    Expr_Primary();
+                    break;
+                default:
+                    throw new SyntaxError(expr_Primary_Values, tokenStream.Current);
+            }
         }
 
         public void Op_unary()
