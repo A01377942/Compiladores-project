@@ -17,7 +17,9 @@ namespace QuetzalDragon
 
         //---------------------------------------------------------
         static readonly string[] ReleaseIncludes = {
-            "Lexical analysis"
+            "Lexical analysis",
+            "Syntactic analysis",
+            "AST construction"
         };
 
         //----------------------------------------------------------
@@ -56,14 +58,15 @@ namespace QuetzalDragon
                 );
                 Environment.Exit(1);
             }
+
             try
             {
                 var inputPath = args[0];
                 var input = File.ReadAllText(inputPath);
                 var parser = new Parser(
                     new Scanner(input).Scan().GetEnumerator());
-                parser.Program();
-                Console.WriteLine("Syntax OK.");
+                var program = parser.Program();
+                Console.Write(program.ToStringTree());
 
             }
             catch (Exception e)
