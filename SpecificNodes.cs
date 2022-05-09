@@ -28,4 +28,26 @@ namespace QuetzalDragon
     class Stmt_If : Node { }
 
     class Else_If_List : Node { }
+
+    class Expr_Rel : Node { }
+
+    class Op_Rel : Node { }
+
+    class Expr_Add : Node{ }
+
+    class Op_add : Node { }
+
+    class Expr_Mul : Node { }
+
+    class Op_Mul : Node { }
+
+    class Expr_Unary : Node { }
+
+    class Op_Unary : Node { }
+
+    class Expr_Primary : Node { }
+
+    class Array : Node { }
+
+    class Lit : Node { }
 }

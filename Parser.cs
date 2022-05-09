@@ -560,13 +560,15 @@ namespace QuetzalDragon
         }
 
 
-        public void Expr_rel()
+        public Node Expr_rel()
         {
 
-            Expr_add();
+            var result = new Expr_Rel();
+            result.Add(Expr_add());
             while (CurrentToken == TokenCategory.LESS_THAN || CurrentToken == TokenCategory.LESS_EQUAL_THAN
             || CurrentToken == TokenCategory.GREATHER_THAN || CurrentToken == TokenCategory.GREATHER_EQUAL_THAN)
             {
+                /*
                 switch (CurrentToken)
                 {
                     case TokenCategory.LESS_THAN:
@@ -588,14 +590,45 @@ namespace QuetzalDragon
                     default:
                         throw new SyntaxError(TokenCategory.LESS_THAN, tokenStream.Current);
                 }
+                */
+                result.Add(Op_rel());
             }
+            return result;
         }
 
-        public void Expr_add()
+        public Node Op_rel(){
+            var result = new Op_Rel();
+             switch (CurrentToken)
+                {
+                    case TokenCategory.LESS_THAN:
+                        Expect(TokenCategory.LESS_THAN);
+                        result.Add(Expr_add());
+                        break;
+                    case TokenCategory.LESS_EQUAL_THAN:
+                        Expect(TokenCategory.LESS_EQUAL_THAN);
+                        result.Add(Expr_add());
+                        break;
+                    case TokenCategory.GREATHER_THAN:
+                        Expect(TokenCategory.GREATHER_THAN);
+                        result.Add(Expr_add());
+                        break;
+                    case TokenCategory.GREATHER_EQUAL_THAN:
+                        Expect(TokenCategory.GREATHER_EQUAL_THAN);
+                        result.Add(Expr_add());
+                        break;
+                    default:
+                        throw new SyntaxError(TokenCategory.LESS_THAN, tokenStream.Current);
+                }
+            return result;
+        }
+
+        public Node Expr_add()
         {
-            Expr_mul();
+            var result = new Expr_Add();
+            result.Add(Expr_mul());
             while (CurrentToken == TokenCategory.PLUS || CurrentToken == TokenCategory.SUBSTRACTION)
             {
+                /*
                 switch (CurrentToken)
                 {
                     case TokenCategory.PLUS:
@@ -609,14 +642,38 @@ namespace QuetzalDragon
                     default:
                         throw new SyntaxError(TokenCategory.PLUS, tokenStream.Current);
                 }
+                */
+                result.Add(Op_add());
             }
+            return result;
         }
 
-        public void Expr_mul()
+        public Node Op_add(){
+            var result = new Op_Add();
+            switch (CurrentToken)
+                {
+                    case TokenCategory.PLUS:
+                        Expect(TokenCategory.PLUS);
+                        result.Add(Expr_mul());
+                        break;
+                    case TokenCategory.SUBSTRACTION:
+                        Expect(TokenCategory.SUBSTRACTION);
+                        result.Add(Expr_mul());
+                        break;
+                    default:
+                        throw new SyntaxError(TokenCategory.PLUS, tokenStream.Current);
+                }
+            return result;
+        }
+
+
+        public Node Expr_mul()
         {
-            Expr_unary();
+            var result = new Expr_Mul();
+            result.Add(Expr_unary());
             while (CurrentToken == TokenCategory.MULTIPLICATION || CurrentToken == TokenCategory.DIVISION || CurrentToken == TokenCategory.REMINDER)
             {
+                /*
                 switch (CurrentToken)
                 {
                     case TokenCategory.MULTIPLICATION:
@@ -634,7 +691,32 @@ namespace QuetzalDragon
                     default:
                         throw new SyntaxError(TokenCategory.MULTIPLICATION, tokenStream.Current);
                 }
+                */
+                result.Add(Op_mul());
             }
+            return result;
+        }
+
+        public Node Op_mul(){
+            var result = new Op_Mul();
+            switch (CurrentToken)
+                {
+                    case TokenCategory.MULTIPLICATION:
+                        Expect(TokenCategory.MULTIPLICATION);
+                        result.Add(Expr_unary());
+                        break;
+                    case TokenCategory.DIVISION:
+                        Expect(TokenCategory.DIVISION);
+                        result.Add(Expr_unary());
+                        break;
+                    case TokenCategory.REMINDER:
+                        Expect(TokenCategory.REMINDER);
+                        result.Add(Expr_unary());
+                        break;
+                    default:
+                        throw new SyntaxError(TokenCategory.MULTIPLICATION, tokenStream.Current);
+                }
+            return result;
         }
 
         /*
