@@ -35,7 +35,7 @@ namespace QuetzalDragon
 
     class Expr_Add : Node{ }
 
-    class Op_add : Node { }
+    class Op_Add : Node { }
 
     class Expr_Mul : Node { }
 

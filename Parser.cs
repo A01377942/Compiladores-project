@@ -733,50 +733,53 @@ namespace QuetzalDragon
         */
         //Ahora:
         //‹expr-unary›→ ‹op-unary›‹expr-unary› |‹expr-primary›
-        public void Expr_unary()
+        public Node Expr_unary()
         {
+            var result = new Expr_Unary();
             switch (CurrentToken)
             {
                 case TokenCategory.PLUS:
-                    Op_unary();
-                    Expr_unary();
+                    result.Add(Op_unary());
+                    result.Add(Expr_unary());
                     break;
                 case TokenCategory.SUBSTRACTION:
-                    Op_unary();
-                    Expr_unary();
+                    result.Add(Op_unary());
+                    result.Add(Expr_unary());
                     break;
                 case TokenCategory.NOT:
-                    Op_unary();
-                    Expr_unary();
+                    result.Add(Op_unary());
+                    result.Add(Expr_unary());
                     break;
                 case TokenCategory.IDENTIFIER:
-                    Expr_Primary();
+                    result.Add(Expr_primary());
                     break;
                 case TokenCategory.LEFT_SQUARE_BRACKET:
-                    Expr_Primary();
+                    result.Add(Expr_primary());
                     break;
                 case TokenCategory.TRUE:
-                    Expr_Primary();
+                    result.Add(Expr_primary());
                     break;
                 case TokenCategory.FALSE:
-                    Expr_Primary();
+                    result.Add(Expr_primary());
                     break;
                 case TokenCategory.INT_LITERAL:
-                    Expr_Primary();
+                    result.Add(Expr_primary());
                     break;
                 case TokenCategory.CHARACTER:
-                    Expr_Primary();
+                    result.Add(Expr_primary());
                     break;
                 case TokenCategory.STRING:
-                    Expr_Primary();
+                    result.Add(Expr_primary());
                     break;
                 default:
                     throw new SyntaxError(expr_Primary_Values, tokenStream.Current);
             }
+            return result;
         }
 
-        public void Op_unary()
+        public Node Op_unary()
         {
+            var result = new Op_Unary();
             switch (CurrentToken)
             {
                 case TokenCategory.PLUS:
@@ -791,10 +794,12 @@ namespace QuetzalDragon
                 default:
                     throw new SyntaxError(Unary_Values, tokenStream.Current);
             }
+            return result;
         }
 
-        public void Expr_Primary()
+        public Node Expr_primary()
         {
+            var result = new Expr_Primary();
             switch (CurrentToken)
             {
                 case TokenCategory.IDENTIFIER:
@@ -804,14 +809,14 @@ namespace QuetzalDragon
 
                         Expect(TokenCategory.PARENTHESIS_OPEN);
 
-                        Expr_List();
+                        result.Add(Expr_List());
 
                         Expect(TokenCategory.PARENTHESIS_CLOSE);
 
                     }
                     break;
                 case TokenCategory.LEFT_SQUARE_BRACKET:
-                    Array();
+                    result.Add(Array());
                     break;
                 case TokenCategory.TRUE:
                     Expect(TokenCategory.TRUE);
@@ -830,18 +835,21 @@ namespace QuetzalDragon
                     break;
                 case TokenCategory.PARENTHESIS_OPEN:
                     Expect(TokenCategory.PARENTHESIS_OPEN);
-                    Expr();
+                    result.Add(Expr());
                     Expect(TokenCategory.PARENTHESIS_CLOSE);
                     break;
                 default:
                     throw new SyntaxError(Lit_Values, tokenStream.Current);
             }
+            return result;
         }
         public void Array()
         {
+            var result = new Array();
             Expect(TokenCategory.LEFT_SQUARE_BRACKET);
-            Expr_List();
+            result.Add(Expr_List());
             Expect(TokenCategory.RIGHT_SQUARE_BRACKET);
+            return result;
         }
 
         public void Lit()
