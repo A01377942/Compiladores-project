@@ -435,28 +435,35 @@ namespace QuetzalDragon
         }
         public Node Else_If_List()
         {
+            var result = new Else_If_List();
 
             while (CurrentToken == TokenCategory.ELIF)
             {
-                Expect(TokenCategory.ELIF);
+                var elif = new Elif();
+                var token = Expect(TokenCategory.ELIF);
+                elif.AnchorToken = token;
                 Expect(TokenCategory.PARENTHESIS_OPEN);
-                Expr();
+                elif.Add(Expr());
+
                 Expect(TokenCategory.PARENTHESIS_CLOSE);
                 Expect(TokenCategory.LEFT_CURLY_BRACE);
-                Stmt_List();
+                elif.Add(Stmt_List());
                 Expect(TokenCategory.RIGHT_CURLY_BRACE);
             }
+            return result;
         }
 
-        public void Else()
+        public Node Else()
         {
+            var result = new Else();
             while (CurrentToken == TokenCategory.ELSE)
             {
                 Expect(TokenCategory.ELSE);
                 Expect(TokenCategory.LEFT_CURLY_BRACE);
-                Stmt_List();
+                result.Add(Stmt_List());
                 Expect(TokenCategory.RIGHT_CURLY_BRACE);
             }
+            return result;
         }
 
         public void Stmp_Loop()
