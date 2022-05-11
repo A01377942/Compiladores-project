@@ -3,7 +3,7 @@
    (C) 2022 Ariel Ortiz, ITESM CEM.
 */
 
-main() {
+main() 2
     prints("hello, world\n");
     return 42;
 }
