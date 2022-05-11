@@ -389,6 +389,7 @@ namespace QuetzalDragon
             {
                 AnchorToken = Expect(TokenCategory.IDENTIFIER)
             });
+
             result.AnchorToken = tokenId;
             Expect(TokenCategory.END_OF_LINE);
         }
@@ -456,6 +457,7 @@ namespace QuetzalDragon
         public Node Else()
         {
             var result = new Else();
+
             while (CurrentToken == TokenCategory.ELSE)
             {
                 Expect(TokenCategory.ELSE);
