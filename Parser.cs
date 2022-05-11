@@ -596,29 +596,35 @@ namespace QuetzalDragon
             return result;
         }
 
-        public Node Op_rel(){
+        public Node Op_rel()
+        {
             var result = new Op_Rel();
-             switch (CurrentToken)
-                {
-                    case TokenCategory.LESS_THAN:
-                        Expect(TokenCategory.LESS_THAN);
-                        result.Add(Expr_add());
-                        break;
-                    case TokenCategory.LESS_EQUAL_THAN:
-                        Expect(TokenCategory.LESS_EQUAL_THAN);
-                        result.Add(Expr_add());
-                        break;
-                    case TokenCategory.GREATHER_THAN:
-                        Expect(TokenCategory.GREATHER_THAN);
-                        result.Add(Expr_add());
-                        break;
-                    case TokenCategory.GREATHER_EQUAL_THAN:
-                        Expect(TokenCategory.GREATHER_EQUAL_THAN);
-                        result.Add(Expr_add());
-                        break;
-                    default:
-                        throw new SyntaxError(TokenCategory.LESS_THAN, tokenStream.Current);
-                }
+            switch (CurrentToken)
+            {
+                case TokenCategory.LESS_THAN:
+
+                    var token = Expect(TokenCategory.LESS_THAN);
+                    result.AnchorToken = token;
+                    result.Add(Expr_add());
+                    break;
+                case TokenCategory.LESS_EQUAL_THAN:
+                    var token = Expect(TokenCategory.LESS_EQUAL_THAN);
+                    result.AnchorToken = token;
+                    result.Add(Expr_add());
+                    break;
+                case TokenCategory.GREATHER_THAN:
+                    var token = Expect(TokenCategory.GREATHER_THAN);
+                    result.AnchorToken = token;
+                    result.Add(Expr_add());
+                    break;
+                case TokenCategory.GREATHER_EQUAL_THAN:
+                    var token = Expect(TokenCategory.GREATHER_EQUAL_THAN);
+                    result.AnchorToken = token;
+                    result.Add(Expr_add());
+                    break;
+                default:
+                    throw new SyntaxError(TokenCategory.LESS_THAN, tokenStream.Current);
+            }
             return result;
         }
 
@@ -648,21 +654,25 @@ namespace QuetzalDragon
             return result;
         }
 
-        public Node Op_add(){
+        public Node Op_add()
+        {
             var result = new Op_Add();
             switch (CurrentToken)
-                {
-                    case TokenCategory.PLUS:
-                        Expect(TokenCategory.PLUS);
-                        result.Add(Expr_mul());
-                        break;
-                    case TokenCategory.SUBSTRACTION:
-                        Expect(TokenCategory.SUBSTRACTION);
-                        result.Add(Expr_mul());
-                        break;
-                    default:
-                        throw new SyntaxError(TokenCategory.PLUS, tokenStream.Current);
-                }
+            {
+                case TokenCategory.PLUS:
+
+                    var token = Expect(TokenCategory.PLUS);
+                    result.AnchorToken = token;
+                    result.Add(Expr_mul());
+                    break;
+                case TokenCategory.SUBSTRACTION:
+                    var token = Expect(TokenCategory.SUBSTRACTION);
+                    result.AnchorToken = token;
+                    result.Add(Expr_mul());
+                    break;
+                default:
+                    throw new SyntaxError(TokenCategory.PLUS, tokenStream.Current);
+            }
             return result;
         }
 
@@ -697,25 +707,29 @@ namespace QuetzalDragon
             return result;
         }
 
-        public Node Op_mul(){
+        public Node Op_mul()
+        {
             var result = new Op_Mul();
             switch (CurrentToken)
-                {
-                    case TokenCategory.MULTIPLICATION:
-                        Expect(TokenCategory.MULTIPLICATION);
-                        result.Add(Expr_unary());
-                        break;
-                    case TokenCategory.DIVISION:
-                        Expect(TokenCategory.DIVISION);
-                        result.Add(Expr_unary());
-                        break;
-                    case TokenCategory.REMINDER:
-                        Expect(TokenCategory.REMINDER);
-                        result.Add(Expr_unary());
-                        break;
-                    default:
-                        throw new SyntaxError(TokenCategory.MULTIPLICATION, tokenStream.Current);
-                }
+            {
+                case TokenCategory.MULTIPLICATION:
+                    var token = Expect(TokenCategory.MULTIPLICATION);
+                    result.AnchorToken = token;
+                    result.Add(Expr_unary());
+                    break;
+                case TokenCategory.DIVISION:
+                    var token = Expect(TokenCategory.DIVISION);
+                    result.AnchorToken = token;
+                    result.Add(Expr_unary());
+                    break;
+                case TokenCategory.REMINDER:
+                    var token = Expect(TokenCategory.REMINDER);
+                    result.AnchorToken = token;
+                    result.Add(Expr_unary());
+                    break;
+                default:
+                    throw new SyntaxError(TokenCategory.MULTIPLICATION, tokenStream.Current);
+            }
             return result;
         }
 
@@ -783,13 +797,13 @@ namespace QuetzalDragon
             switch (CurrentToken)
             {
                 case TokenCategory.PLUS:
-                    Expect(TokenCategory.PLUS);
+                    result.AnchorToken = Expect(TokenCategory.PLUS);
                     break;
                 case TokenCategory.SUBSTRACTION:
-                    Expect(TokenCategory.SUBSTRACTION);
+                    result.AnchorToken = Expect(TokenCategory.SUBSTRACTION);
                     break;
                 case TokenCategory.NOT:
-                    Expect(TokenCategory.NOT);
+                    result.AnchorToken = Expect(TokenCategory.NOT);
                     break;
                 default:
                     throw new SyntaxError(Unary_Values, tokenStream.Current);
@@ -803,7 +817,12 @@ namespace QuetzalDragon
             switch (CurrentToken)
             {
                 case TokenCategory.IDENTIFIER:
-                    Expect(TokenCategory.IDENTIFIER);
+
+                    //Expect(TokenCategory.IDENTIFIER);
+                    result.Add(new Identifier()
+                    {
+                        AnchorToken = Expect(TokenCategory.IDENTIFIER)
+                    });
                     if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
                     {
 
@@ -819,19 +838,24 @@ namespace QuetzalDragon
                     result.Add(Array());
                     break;
                 case TokenCategory.TRUE:
-                    Expect(TokenCategory.TRUE);
+                    //Expect(TokenCategory.TRUE);
+                    result.Add(Lit());
                     break;
                 case TokenCategory.FALSE:
-                    Expect(TokenCategory.FALSE);
+                    //Expect(TokenCategory.FALSE);
+                    result.Add(Lit());
                     break;
                 case TokenCategory.INT_LITERAL:
-                    Expect(TokenCategory.INT_LITERAL);
+                    //Expect(TokenCategory.INT_LITERAL);
+                    result.Add(Lit());
                     break;
                 case TokenCategory.CHARACTER:
-                    Expect(TokenCategory.CHARACTER);
+                    //Expect(TokenCategory.CHARACTER);
+                    result.Add(Lit());
                     break;
                 case TokenCategory.STRING:
-                    Expect(TokenCategory.STRING);
+                    // Expect(TokenCategory.STRING);
+                    result.Add(Lit());
                     break;
                 case TokenCategory.PARENTHESIS_OPEN:
                     Expect(TokenCategory.PARENTHESIS_OPEN);
@@ -852,28 +876,30 @@ namespace QuetzalDragon
             return result;
         }
 
-        public void Lit()
+        public Node Lit()
         {
+            var result = new Lit();
             switch (CurrentToken)
             {
                 case TokenCategory.TRUE:
-                    Expect(TokenCategory.TRUE);
+                    result.AnchorToken = Expect(TokenCategory.TRUE);
                     break;
                 case TokenCategory.FALSE:
-                    Expect(TokenCategory.FALSE);
+                    result.AnchorToken = Expect(TokenCategory.FALSE);
                     break;
                 case TokenCategory.INT_LITERAL:
-                    Expect(TokenCategory.INT_LITERAL);
+                    result.AnchorToken = Expect(TokenCategory.INT_LITERAL);
                     break;
                 case TokenCategory.CHARACTER:
-                    Expect(TokenCategory.CHARACTER);
+                    result.AnchorToken = Expect(TokenCategory.CHARACTER);
                     break;
                 case TokenCategory.STRING:
-                    Expect(TokenCategory.STRING);
+                    result.AnchorToken = Expect(TokenCategory.STRING);
                     break;
                 default:
                     throw new SyntaxError(Lit_Values, tokenStream.Current);
             }
+            return result;
         }
 
 

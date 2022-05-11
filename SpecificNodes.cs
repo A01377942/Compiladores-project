@@ -33,7 +33,7 @@ namespace QuetzalDragon
 
     class Op_Rel : Node { }
 
-    class Expr_Add : Node{ }
+    class Expr_Add : Node { }
 
     class Op_Add : Node { }
 
@@ -50,4 +50,12 @@ namespace QuetzalDragon
     class Array : Node { }
 
     class Lit : Node { }
+
+    class Boolean : Node { }
+
+    class IntLiteral : Node { }
+
+    class Character : Node { }
+
+    class String : Node { }
 }
