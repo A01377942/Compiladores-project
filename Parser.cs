@@ -876,7 +876,7 @@ namespace QuetzalDragon
             }
             return result;
         }
-        public void Array()
+        public Node Array()
         {
             var result = new Array();
             Expect(TokenCategory.LEFT_SQUARE_BRACKET);
