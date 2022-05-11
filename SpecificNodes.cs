@@ -9,6 +9,21 @@ namespace QuetzalDragon
 
     class VarDefList : Node { }
 
+    class Op_Comp: Node { }
+    class Stmt_Loop : Node { }
+
+    class Stmt_Break: Node { }
+
+    class Stmt_Return: Node { }
+
+    class Expr: Node { }
+
+    class Expr_And: Node { }
+
+    class Expr_Or: Node { }
+
+    class Expr_Comp: Node { }
+
     class Identifier : Node { }
 
     class Fun_Def : Node { }

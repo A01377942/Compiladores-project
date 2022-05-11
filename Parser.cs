@@ -28,15 +28,15 @@ Luis Jonathan Rosas Ramos A01377942
 Jonathan
 ‹else-if-list›→    ( elif ( ‹expr› ) { ‹stmt-list› })*
 ‹else›→    ( else{ ‹stmt-list› })*
-‹stmt-loop›→    loop { ‹stmt-list› }
-‹stmt-break›→    break ;
-‹stmt-return›→    return ‹expr› ;
-‹stmt-empty›→    ;
-‹expr›→           ‹expr-or›
-‹expr-or›→       ‹expr-and› (or ‹expr-and›)*
-‹expr-and›→    ‹expr-comp› (and ‹expr-comp›)*
-‹expr-comp›→‹expr-rel›(‹op-comp› ‹expr-rel›)*
-‹op-comp›→    ==|!=
+                ‹stmt-loop›→    loop { ‹stmt-list› }
+                ‹stmt-break›→    break ;
+                ‹stmt-return›→    return ‹expr› ;
+                ‹stmt-empty›→    ;
+                ‹expr›→           ‹expr-or›
+                ‹expr-or›→       ‹expr-and› (or ‹expr-and›)*
+                ‹expr-and›→    ‹expr-comp› (and ‹expr-comp›)*
+                ‹expr-comp›→‹expr-rel›(‹op-comp› ‹expr-rel›)*
+                ‹op-comp›→    ==|!=
 
 
 Emiliano:
@@ -470,37 +470,40 @@ namespace QuetzalDragon
 
         public void Stmp_Loop()
         {
-            Expect(TokenCategory.LOOP);
+            // Expect(TokenCategory.LOOP);
+            // Expect(TokenCategory.LEFT_CURLY_BRACE);
+            // var var_list = Stmt_List();
+            // Expect(TokenCategory.RIGHT_CURLY_BRACE);
+            // return var_list;
+
+            var result = new Stmt_Loop();
+            result.AnchorToken = Expect(TokenCategory.LOOP);
             Expect(TokenCategory.LEFT_CURLY_BRACE);
-            Stmt_List();
+            result.add(Stmt_List());
             Expect(TokenCategory.RIGHT_CURLY_BRACE);
+            return result;
         }
         public void Stmp_Break()
         {
-            Expect(TokenCategory.BREAK);
+            var result = new Stmt_Break();
+            result.AnchorToken = Expect(TokenCategory.BREAK);
             Expect(TokenCategory.END_OF_LINE);
+            return result;
         }
 
-        public void Stmp_Return()
+        public Node Stmp_Return()
         {
-            Expect(TokenCategory.RETURN);
-            Expr();
+            // Expect(TokenCategory.RETURN);
+            // Expr();
+            // Expect(TokenCategory.END_OF_LINE);
+            
+            var result = new Stmt_Return();
+            result.AnchorToken = Expect(TokenCategory.RETURN);
+            result.add(Expr());
             Expect(TokenCategory.END_OF_LINE);
+            return result;
         }
 
-        /*
-        Anterior:
-        ‹expr-list-cont›→(, ‹expr›)*
-                public void Expr_List_Cont()
-        {
-            while (CurrentToken == TokenCategory.COMA)
-            {
-                Expect(TokenCategory.COMA);
-                Expr();
-            }
-        }
-
-        */
         //Ahora: ‹expr-list-cont›→ (,<expr> <expr-list-cont>)?
         public Node Expr_List_Cont()
         {
@@ -516,52 +519,58 @@ namespace QuetzalDragon
         public void Expr()
         {
 
-            Expr_Or();
+            var result = new Expr();
+            result.add(Expr_Or());
+            return result;
         }
 
         public void Expr_Or()
         {
-
-            Expr_And();
+            var result = new Expr_Or()
+            result.add(Expr_And());
             while (CurrentToken == TokenCategory.OR)
             {
                 Expect(TokenCategory.OR);
-                Expr_And();
+                result.add(Expr_And());
             }
+            return result;
         }
 
         public void Expr_And()
         {
-            Expr_Comp();
+            var result = new Expr_And();
+            result.add(Expr_Comp());
             while (CurrentToken == TokenCategory.AND)
             {
                 Expect(TokenCategory.AND);
-                Expr_Comp();
+                result.add(Expr_Comp());
             }
+            return result;
         }
 
         //‹expr-comp›→‹expr-rel›(‹op-comp› ‹expr-rel›)*
         public void Expr_Comp()
         {
-            Expr_rel();
+            var result = new Expr_Comp();
+            result.add(Expr_rel());
             while (CurrentToken == TokenCategory.EQUAL_TO || CurrentToken == TokenCategory.NOT_EQUAL_TO)
             {
-                Op_Comp();
-                Expr_rel();
+                result.add(Op_Comp());
+                result.add(Expr_rel());
             }
-
+            return result;
         }
 
         public void Op_Comp()
         {
-
+            var result = new Op_Comp();
             switch (CurrentToken)
             {
                 case TokenCategory.EQUAL_TO:
-                    Expect(TokenCategory.EQUAL_TO);
+                    result.AnchorToken = Expect(TokenCategory.EQUAL_TO);
                     break;
                 case TokenCategory.NOT_EQUAL_TO:
-                    Expect(TokenCategory.NOT_EQUAL_TO);
+                    result.AnchorToken = Expect(TokenCategory.NOT_EQUAL_TO);
                     break;
                 default:
                     throw new SyntaxError(TokenCategory.EQUAL_TO, tokenStream.Current);
