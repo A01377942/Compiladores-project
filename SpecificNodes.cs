@@ -9,21 +9,40 @@ namespace QuetzalDragon
 
     class VarDefList : Node { }
 
-    class Op_Comp: Node { }
+    class Op_Comp : Node { }
     class Stmt_Loop : Node { }
 
-    class Stmt_Break: Node { }
+    class Stmt_Break : Node { }
 
-    class Stmt_Return: Node { }
+    class Stmt_Return : Node { }
 
-    class Expr: Node { }
+    class Expr : Node { }
 
-    class Expr_And: Node { }
+    class Expr_And : Node { }
 
-    class Expr_Or: Node { }
+    class Expr_Or : Node { }
 
-    class Expr_Comp: Node { }
+    class Expr_Comp : Node { }
 
+    class PLUS : Node { }
+    class MULTIPLICATION : Node { }
+
+    class DIVISION : Node { }
+
+    class REMINDER : Node { }
+
+    class NOT : Node { }
+
+    class FUN_CALL : Node { }
+
+    class SUBSTRACTION : Node { }
+    class EQUAL_TO : Node { }
+
+    class NOT_EQUAL_TO : Node { }
+    class LESS_THAN : Node { }
+    class LESS_EQUAL_THAN : Node { }
+    class GREATHER_THAN : Node { }
+    class GREATHER_EQUAL_THAN : Node { }
     class Identifier : Node { }
 
     class Fun_Def : Node { }
@@ -31,6 +50,8 @@ namespace QuetzalDragon
     class Stmt_List : Node { }
 
     class Stmt : Node { }
+    class Empty : Node { }
+    class Assign : Node { }
 
     class Expr_List : Node { }
 

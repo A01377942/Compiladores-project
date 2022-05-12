@@ -28,15 +28,15 @@ Luis Jonathan Rosas Ramos A01377942
 Jonathan
 ‹else-if-list›→    ( elif ( ‹expr› ) { ‹stmt-list› })*
 ‹else›→    ( else{ ‹stmt-list› })*
-                ‹stmt-loop›→    loop { ‹stmt-list› }
-                ‹stmt-break›→    break ;
-                ‹stmt-return›→    return ‹expr› ;
-                ‹stmt-empty›→    ;
-                ‹expr›→           ‹expr-or›
-                ‹expr-or›→       ‹expr-and› (or ‹expr-and›)*
-                ‹expr-and›→    ‹expr-comp› (and ‹expr-comp›)*
-                ‹expr-comp›→‹expr-rel›(‹op-comp› ‹expr-rel›)*
-                ‹op-comp›→    ==|!=
+‹stmt-loop›→    loop { ‹stmt-list› }
+‹stmt-break›→    break ;
+‹stmt-return›→    return ‹expr› ;
+‹stmt-empty›→    ;
+‹expr›→           ‹expr-or›
+‹expr-or›→       ‹expr-and› (or ‹expr-and›)*
+‹expr-and›→    ‹expr-comp› (and ‹expr-comp›)*
+‹expr-comp›→‹expr-rel›(‹op-comp› ‹expr-rel›)*
+‹op-comp›→    ==|!=
 
 
 Emiliano:
@@ -209,9 +209,10 @@ namespace QuetzalDragon
 
         public Node Var_Def()
         {
-            Expect(TokenCategory.VAR);
+            var token = Expect(TokenCategory.VAR);
             //Var_List();
             var var_list = Var_List();
+            var_list.AnchorToken = token;
 
             Expect(TokenCategory.END_OF_LINE);
             return var_list;
@@ -309,28 +310,71 @@ namespace QuetzalDragon
             }
             return result;
         }
-
+        /*
+                case TokenCategory.IDENTIFIER:
+                            var result = new Assign();
+                            result.Add(new Identifier()
+                            {
+                                AnchorToken = Expect(TokenCategory.IDENTIFIER)
+                            });
+                            //Expect(TokenCategory.IDENTIFIER);
+                            //result.AnchorToken = Expect(TokenCategory.IDENTIFIER);
+                            switch (CurrentToken)
+                            {
+                                case TokenCategory.ASSIGN:
+                                    result.AnchorToken = Expect(TokenCategory.ASSIGN);
+                                    result.Add(Expr());
+                                    Expect(TokenCategory.END_OF_LINE);
+                                    return result;
+                                    break;
+                                case TokenCategory.PARENTHESIS_OPEN:
+                                    Expect(TokenCategory.PARENTHESIS_OPEN);
+                                    result.Add(Expr_List());
+                                    Expect(TokenCategory.PARENTHESIS_CLOSE);
+                                    Expect(TokenCategory.END_OF_LINE);
+                                    return result;
+                                    break;
+                                default:
+                                    throw new SyntaxError(def_Values,
+                                                        tokenStream.Current);
+                            }
+                            break;
+        */
         public Node Stmt()
         {
-            var result = new Stmt();
+            //var result = new Stmt();
             switch (CurrentToken)
             {
                 case TokenCategory.IDENTIFIER:
+                    var result = new Assign();
+                    var token = Expect(TokenCategory.IDENTIFIER);
+
                     //Expect(TokenCategory.IDENTIFIER);
-                    result.AnchorToken = Expect(TokenCategory.IDENTIFIER);
+                    //result.AnchorToken = Expect(TokenCategory.IDENTIFIER);
                     switch (CurrentToken)
                     {
                         case TokenCategory.ASSIGN:
-
-                            Expect(TokenCategory.ASSIGN);
+                            result.Add(new Identifier()
+                            {
+                                AnchorToken = token
+                            });
+                            result.AnchorToken = Expect(TokenCategory.ASSIGN);
                             result.Add(Expr());
                             Expect(TokenCategory.END_OF_LINE);
+                            return result;
                             break;
                         case TokenCategory.PARENTHESIS_OPEN:
+                            //
+                            var result3 = new FUN_CALL();
+                            result3.Add(new Identifier()
+                            {
+                                AnchorToken = token
+                            });
                             Expect(TokenCategory.PARENTHESIS_OPEN);
-                            result.Add(Expr_List());
+                            result3.Add(Expr_List());
                             Expect(TokenCategory.PARENTHESIS_CLOSE);
                             Expect(TokenCategory.END_OF_LINE);
+                            return result3;
                             break;
                         default:
                             throw new SyntaxError(def_Values,
@@ -339,25 +383,27 @@ namespace QuetzalDragon
                     break;
 
                 case TokenCategory.INC:
-                    result.Add(Stmt_Incr());
+                    return Stmt_Incr();
                     break;
                 case TokenCategory.DEC:
-                    result.Add(Stmt_Decr());
+                    return Stmt_Decr();
                     break;
                 case TokenCategory.IF:
-                    result.Add(Stmt_If());
+                    return Stmt_If();
                     break;
                 case TokenCategory.LOOP:
-                    result.Add(Stmp_Loop());
+                    return Stmp_Loop();
                     break;
                 case TokenCategory.BREAK:
-                    result.Add(Stmp_Break());
+                    return Stmp_Break();
                     break;
                 case TokenCategory.RETURN:
-                    result.Add(Stmp_Return());
+                    return Stmp_Return();
                     break;
                 case TokenCategory.END_OF_LINE:
-                    Expect(TokenCategory.END_OF_LINE);
+                    var result2 = new Empty();
+                    result2.AnchorToken = Expect(TokenCategory.END_OF_LINE);
+                    return result2;
                     break;
 
                 default:
@@ -365,7 +411,7 @@ namespace QuetzalDragon
                                         tokenStream.Current);
 
             }
-            return result;
+
         }
 
         //‹expr-list› →(‹expr› ‹expr-list-cont›)?
@@ -387,6 +433,7 @@ namespace QuetzalDragon
         {
             var tokenId = Expect(TokenCategory.INC);
             var result = new Stmt_Incr();
+
             result.Add(new Identifier()
             {
                 AnchorToken = Expect(TokenCategory.IDENTIFIER)
@@ -456,6 +503,7 @@ namespace QuetzalDragon
                 Expect(TokenCategory.LEFT_CURLY_BRACE);
                 elif.Add(Stmt_List());
                 Expect(TokenCategory.RIGHT_CURLY_BRACE);
+                result.Add(elif);
             }
             return result;
         }
@@ -526,32 +574,36 @@ namespace QuetzalDragon
         }
         public Node Expr()
         {
-
-            var result = new Expr();
-            result.Add(Expr_Or());
-            return result;
+            return Expr_Or();
         }
 
         public Node Expr_Or()
         {
-            var result = new Expr_Or();
-            result.Add(Expr_And());
+            var result = Expr_And();
             while (CurrentToken == TokenCategory.OR)
             {
-                Expect(TokenCategory.OR);
-                result.Add(Expr_And());
+                var token = Expect(TokenCategory.OR);
+                var node = new Expr_Or();
+                node.AnchorToken = token;
+                node.Add(result);
+                node.Add(Expr_And());
+                result = node;
             }
             return result;
         }
 
         public Node Expr_And()
         {
-            var result = new Expr_And();
-            result.Add(Expr_Comp());
+            var result = Expr_Comp();
+            //result.Add(Expr_Comp());
             while (CurrentToken == TokenCategory.AND)
             {
-                Expect(TokenCategory.AND);
-                result.Add(Expr_Comp());
+                var token = Expect(TokenCategory.AND);
+                var node = new Expr_And();
+                node.AnchorToken = token;
+                node.Add(result);
+                node.Add(Expr_Comp());
+                result = node;
             }
             return result;
         }
@@ -559,39 +611,54 @@ namespace QuetzalDragon
         //‹expr-comp›→‹expr-rel›(‹op-comp› ‹expr-rel›)*
         public Node Expr_Comp()
         {
-            var result = new Expr_Comp();
-            result.Add(Expr_rel());
+            var result = Expr_rel();
+
+
             while (CurrentToken == TokenCategory.EQUAL_TO || CurrentToken == TokenCategory.NOT_EQUAL_TO)
             {
-                result.Add(Op_Comp());
-                result.Add(Expr_rel());
+                //result.Add(Op_Comp());
+                //result.Add(Expr_rel());
+                var node = Op_Comp();
+                node.Add(result);
+                node.Add(Expr_rel());
+                result = node;
             }
             return result;
         }
 
         public Node Op_Comp()
         {
-            var result = new Op_Comp();
+            //var result = new Op_Comp();
             switch (CurrentToken)
             {
                 case TokenCategory.EQUAL_TO:
-                    result.AnchorToken = Expect(TokenCategory.EQUAL_TO);
+                    //result.AnchorToken = Expect(TokenCategory.EQUAL_TO);
+                    //EQUAL_TO
+                    return new EQUAL_TO()
+                    {
+                        AnchorToken = Expect(TokenCategory.EQUAL_TO)
+                    };
                     break;
                 case TokenCategory.NOT_EQUAL_TO:
-                    result.AnchorToken = Expect(TokenCategory.NOT_EQUAL_TO);
+                    //result.AnchorToken = Expect(TokenCategory.NOT_EQUAL_TO);
+                    return new NOT_EQUAL_TO()
+                    {
+                        AnchorToken = Expect(TokenCategory.NOT_EQUAL_TO)
+                    };
                     break;
                 default:
                     throw new SyntaxError(TokenCategory.EQUAL_TO, tokenStream.Current);
             }
-            return result;
+            //return result;
         }
 
 
         public Node Expr_rel()
         {
 
-            var result = new Expr_Rel();
-            result.Add(Expr_add());
+            //var result = new Expr_Rel();
+            //result.Add(Expr_add());
+            var result = Expr_add();
             while (CurrentToken == TokenCategory.LESS_THAN || CurrentToken == TokenCategory.LESS_EQUAL_THAN
             || CurrentToken == TokenCategory.GREATHER_THAN || CurrentToken == TokenCategory.GREATHER_EQUAL_THAN)
             {
@@ -618,46 +685,65 @@ namespace QuetzalDragon
                         throw new SyntaxError(TokenCategory.LESS_THAN, tokenStream.Current);
                 }
                 */
-                result.Add(Op_rel());
+                // result.Add(Op_rel());
+                var node = Op_rel();
+                node.Add(result);
+                node.Add(Expr_add());
+                result = node;
             }
             return result;
         }
 
         public Node Op_rel()
         {
-            var result = new Op_Rel();
+            //var result = new Op_Rel();
             switch (CurrentToken)
             {
                 case TokenCategory.LESS_THAN:
-
-                    result.AnchorToken = Expect(TokenCategory.LESS_THAN);
-                    result.Add(Expr_add());
+                    //result.AnchorToken = Expect(TokenCategory.LESS_THAN);
+                    // result.Add(Expr_add());
+                    return new LESS_THAN()
+                    {
+                        AnchorToken = Expect(TokenCategory.LESS_THAN)
+                    };
                     break;
                 case TokenCategory.LESS_EQUAL_THAN:
 
-                    result.AnchorToken = Expect(TokenCategory.LESS_EQUAL_THAN);
-                    result.Add(Expr_add());
+                    //result.AnchorToken = Expect(TokenCategory.LESS_EQUAL_THAN);
+                    // result.Add(Expr_add());
+                    return new LESS_EQUAL_THAN()
+                    {
+                        AnchorToken = Expect(TokenCategory.LESS_EQUAL_THAN)
+                    };
                     break;
                 case TokenCategory.GREATHER_THAN:
 
-                    result.AnchorToken = Expect(TokenCategory.GREATHER_THAN);
-                    result.Add(Expr_add());
+                    //result.AnchorToken = Expect(TokenCategory.GREATHER_THAN);
+                    //result.Add(Expr_add());
+                    return new GREATHER_THAN()
+                    {
+                        AnchorToken = Expect(TokenCategory.GREATHER_THAN)
+                    };
                     break;
                 case TokenCategory.GREATHER_EQUAL_THAN:
-
-                    result.AnchorToken = Expect(TokenCategory.GREATHER_EQUAL_THAN);
-                    result.Add(Expr_add());
+                    //result.AnchorToken = Expect(TokenCategory.GREATHER_EQUAL_THAN);
+                    //result.Add(Expr_add());
+                    return new GREATHER_EQUAL_THAN()
+                    {
+                        AnchorToken = Expect(TokenCategory.GREATHER_EQUAL_THAN)
+                    };
                     break;
                 default:
                     throw new SyntaxError(TokenCategory.LESS_THAN, tokenStream.Current);
             }
-            return result;
+            //return result;
         }
 
         public Node Expr_add()
         {
-            var result = new Expr_Add();
-            result.Add(Expr_mul());
+            // var result = new Expr_Add();
+            //result.Add(Expr_mul());
+            var result = Expr_mul();
             while (CurrentToken == TokenCategory.PLUS || CurrentToken == TokenCategory.SUBSTRACTION)
             {
                 /*
@@ -675,38 +761,49 @@ namespace QuetzalDragon
                         throw new SyntaxError(TokenCategory.PLUS, tokenStream.Current);
                 }
                 */
-                result.Add(Op_add());
+                // result.Add(Op_add());
+                var node = Op_add();
+                node.Add(result);
+                node.Add(Expr_mul());
+                result = node;
             }
             return result;
         }
 
         public Node Op_add()
         {
-            var result = new Op_Add();
+            // var result = new Op_Add();
             switch (CurrentToken)
             {
                 case TokenCategory.PLUS:
-
-
-                    result.AnchorToken = Expect(TokenCategory.PLUS);
-                    result.Add(Expr_mul());
+                    //result.AnchorToken = Expect(TokenCategory.PLUS);
+                    //result.Add(Expr_mul());
+                    return new PLUS()
+                    {
+                        AnchorToken = Expect(TokenCategory.PLUS)
+                    };
                     break;
                 case TokenCategory.SUBSTRACTION:
 
-                    result.AnchorToken = Expect(TokenCategory.SUBSTRACTION);
-                    result.Add(Expr_mul());
+                    //result.AnchorToken = Expect(TokenCategory.SUBSTRACTION);
+                    //result.Add(Expr_mul());
+                    return new SUBSTRACTION()
+                    {
+                        AnchorToken = Expect(TokenCategory.SUBSTRACTION)
+                    };
                     break;
                 default:
                     throw new SyntaxError(TokenCategory.PLUS, tokenStream.Current);
             }
-            return result;
+            //return result;
         }
 
 
         public Node Expr_mul()
         {
-            var result = new Expr_Mul();
-            result.Add(Expr_unary());
+            //var result = new Expr_Mul();
+            //result.Add(Expr_unary());
+            var result = Expr_unary();
             while (CurrentToken == TokenCategory.MULTIPLICATION || CurrentToken == TokenCategory.DIVISION || CurrentToken == TokenCategory.REMINDER)
             {
                 /*
@@ -728,35 +825,52 @@ namespace QuetzalDragon
                         throw new SyntaxError(TokenCategory.MULTIPLICATION, tokenStream.Current);
                 }
                 */
-                result.Add(Op_mul());
+                //result.Add(Op_mul());
+                var node = Op_mul();
+                node.Add(result);
+                node.Add(Expr_unary());
+                result = node;
             }
             return result;
         }
 
         public Node Op_mul()
         {
-            var result = new Op_Mul();
+            //var result = new Op_Mul();
             switch (CurrentToken)
             {
                 case TokenCategory.MULTIPLICATION:
+                    return new MULTIPLICATION()
+                    {
+                        AnchorToken = Expect(TokenCategory.MULTIPLICATION)
+                    };
+                    //  result.AnchorToken = Expect(TokenCategory.MULTIPLICATION);
+                    // result.Add(Expr_unary());
 
-                    result.AnchorToken = Expect(TokenCategory.MULTIPLICATION);
-                    result.Add(Expr_unary());
                     break;
                 case TokenCategory.DIVISION:
+                    return new DIVISION()
+                    {
+                        AnchorToken = Expect(TokenCategory.DIVISION)
+                    };
+                    //result.AnchorToken = Expect(TokenCategory.DIVISION);
+                    //result.Add(Expr_unary());
 
-                    result.AnchorToken = Expect(TokenCategory.DIVISION);
-                    result.Add(Expr_unary());
                     break;
                 case TokenCategory.REMINDER:
+                    return new REMINDER()
+                    {
+                        AnchorToken = Expect(TokenCategory.REMINDER)
+                    };
+                    //result.AnchorToken = Expect(TokenCategory.REMINDER);
+                    //result.Add(Expr_unary());
 
-                    result.AnchorToken = Expect(TokenCategory.REMINDER);
-                    result.Add(Expr_unary());
                     break;
                 default:
                     throw new SyntaxError(TokenCategory.MULTIPLICATION, tokenStream.Current);
             }
-            return result;
+
+            //return result;
         }
 
         /*
@@ -775,46 +889,62 @@ namespace QuetzalDragon
         //‹expr-unary›→ ‹op-unary›‹expr-unary› |‹expr-primary›
         public Node Expr_unary()
         {
-            var result = new Expr_Unary();
+            //var result = new Expr_Unary();
             switch (CurrentToken)
             {
                 case TokenCategory.PLUS:
-                    result.Add(Op_unary());
-                    result.Add(Expr_unary());
+                    // result.Add(Op_unary());
+                    // result.Add(Expr_unary());
+                    var token1 = Expect(TokenCategory.PLUS);
+                    var expr1 = Expr_unary();
+                    var result1 = new PLUS() { expr1 };
+                    result1.AnchorToken = token1;
+                    return result1;
                     break;
                 case TokenCategory.SUBSTRACTION:
-                    result.Add(Op_unary());
-                    result.Add(Expr_unary());
+                    //result.Add(Op_unary());
+                    // result.Add(Expr_unary());
+                    var token2 = Expect(TokenCategory.SUBSTRACTION);
+                    var expr2 = Expr_unary();
+                    var result2 = new SUBSTRACTION() { expr2 };
+                    result2.AnchorToken = token2;
+                    return result2;
                     break;
                 case TokenCategory.NOT:
-                    result.Add(Op_unary());
-                    result.Add(Expr_unary());
+                    //result.Add(Op_unary());
+                    // result.Add(Expr_unary());
+                    var token3 = Expect(TokenCategory.NOT);
+                    var expr3 = Expr_unary();
+                    var result3 = new NOT() { expr3 };
+                    result3.AnchorToken = token3;
+                    return result3;
                     break;
                 case TokenCategory.IDENTIFIER:
-                    result.Add(Expr_primary());
+                    //result.Add(Expr_primary());
+                    return Expr_primary();
                     break;
                 case TokenCategory.LEFT_SQUARE_BRACKET:
-                    result.Add(Expr_primary());
+                    return Expr_primary();
                     break;
                 case TokenCategory.TRUE:
-                    result.Add(Expr_primary());
+                    return Expr_primary();
                     break;
                 case TokenCategory.FALSE:
-                    result.Add(Expr_primary());
+                    return Expr_primary();
                     break;
                 case TokenCategory.INT_LITERAL:
-                    result.Add(Expr_primary());
+                    return Expr_primary();
                     break;
                 case TokenCategory.CHARACTER:
-                    result.Add(Expr_primary());
+                    return Expr_primary();
                     break;
                 case TokenCategory.STRING:
-                    result.Add(Expr_primary());
+                    return Expr_primary();
                     break;
                 default:
                     throw new SyntaxError(expr_Primary_Values, tokenStream.Current);
             }
-            return result;
+            //return result;
         }
 
         public Node Op_unary()
@@ -839,59 +969,76 @@ namespace QuetzalDragon
 
         public Node Expr_primary()
         {
-            var result = new Expr_Primary();
+            //var result = new Expr_Primary();
             switch (CurrentToken)
             {
                 case TokenCategory.IDENTIFIER:
+                    var token = Expect(TokenCategory.IDENTIFIER);
 
                     //Expect(TokenCategory.IDENTIFIER);
-                    result.Add(new Identifier()
-                    {
-                        AnchorToken = Expect(TokenCategory.IDENTIFIER)
-                    });
+                    // var result = new FUN_CALL();
+                    // result.Add(new Identifier()
+                    // {
+                    //     AnchorToken = Expect(TokenCategory.IDENTIFIER)
+                    // });
+
                     if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
                     {
-
+                        var result = new FUN_CALL();
+                        result.Add(new Identifier()
+                        {
+                            AnchorToken = token
+                        });
                         Expect(TokenCategory.PARENTHESIS_OPEN);
 
                         result.Add(Expr_List());
 
                         Expect(TokenCategory.PARENTHESIS_CLOSE);
-
+                        return result;
                     }
+                    var result2 = new Identifier();
+                    result2.AnchorToken = token;
+                    return result2;
                     break;
                 case TokenCategory.LEFT_SQUARE_BRACKET:
-                    result.Add(Array());
+                    //result.Add(Array());
+                    return Array();
                     break;
                 case TokenCategory.TRUE:
                     //Expect(TokenCategory.TRUE);
-                    result.Add(Lit());
+                    //result.Add(Lit());
+                    return Lit();
                     break;
                 case TokenCategory.FALSE:
                     //Expect(TokenCategory.FALSE);
-                    result.Add(Lit());
+                    //result.Add(Lit());
+                    return Lit();
                     break;
                 case TokenCategory.INT_LITERAL:
                     //Expect(TokenCategory.INT_LITERAL);
-                    result.Add(Lit());
+                    //result.Add(Lit());
+                    return Lit();
                     break;
                 case TokenCategory.CHARACTER:
                     //Expect(TokenCategory.CHARACTER);
-                    result.Add(Lit());
+                    //result.Add(Lit());
+                    return Lit();
                     break;
                 case TokenCategory.STRING:
                     // Expect(TokenCategory.STRING);
-                    result.Add(Lit());
+                    //result.Add(Lit());
+                    return Lit();
                     break;
                 case TokenCategory.PARENTHESIS_OPEN:
                     Expect(TokenCategory.PARENTHESIS_OPEN);
-                    result.Add(Expr());
+                    // result.Add(Expr());
+                    return Expr();
                     Expect(TokenCategory.PARENTHESIS_CLOSE);
                     break;
                 default:
                     throw new SyntaxError(Lit_Values, tokenStream.Current);
             }
-            return result;
+            //return result;
         }
         public Node Array()
         {
@@ -904,28 +1051,49 @@ namespace QuetzalDragon
 
         public Node Lit()
         {
-            var result = new Lit();
+            //var result = new Lit();
             switch (CurrentToken)
             {
                 case TokenCategory.TRUE:
-                    result.AnchorToken = Expect(TokenCategory.TRUE);
+                    //result.AnchorToken = Expect(TokenCategory.TRUE);
+                    return new Boolean()
+                    {
+                        AnchorToken = Expect(TokenCategory.TRUE)
+                    };
                     break;
                 case TokenCategory.FALSE:
-                    result.AnchorToken = Expect(TokenCategory.FALSE);
+                    //result.AnchorToken = Expect(TokenCategory.FALSE);
+                    return new Boolean()
+                    {
+                        AnchorToken = Expect(TokenCategory.FALSE)
+                    };
                     break;
                 case TokenCategory.INT_LITERAL:
-                    result.AnchorToken = Expect(TokenCategory.INT_LITERAL);
+                    //result.AnchorToken = Expect(TokenCategory.INT_LITERAL);
+                    return new IntLiteral()
+                    {
+                        AnchorToken = Expect(TokenCategory.INT_LITERAL)
+                    };
                     break;
                 case TokenCategory.CHARACTER:
-                    result.AnchorToken = Expect(TokenCategory.CHARACTER);
+                    //result.AnchorToken = Expect(TokenCategory.CHARACTER);
+                    return new Character()
+                    {
+                        AnchorToken = Expect(TokenCategory.CHARACTER)
+                    };
+
                     break;
                 case TokenCategory.STRING:
-                    result.AnchorToken = Expect(TokenCategory.STRING);
+                    // result.AnchorToken = Expect(TokenCategory.STRING);
+                    return new String()
+                    {
+                        AnchorToken = Expect(TokenCategory.STRING)
+                    };
                     break;
                 default:
                     throw new SyntaxError(Lit_Values, tokenStream.Current);
             }
-            return result;
+            //return result;
         }
 
 
