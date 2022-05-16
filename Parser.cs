@@ -422,7 +422,13 @@ namespace QuetzalDragon
             if (expr_Values.Contains(CurrentToken))
             {
                 result.Add(Expr());
-                result.Add(Expr_List_Cont());
+                //result.Add(Expr_List_Cont());
+
+                while (CurrentToken == TokenCategory.COMA)
+                {
+                    Expect(TokenCategory.COMA);
+                    result.Add(Expr());
+                }
 
             }
             return result;
@@ -559,19 +565,7 @@ namespace QuetzalDragon
         }
 
         //Ahora: ‹expr-list-cont›→ (,<expr> <expr-list-cont>)?
-        public Node Expr_List_Cont()
-        {
-            var result = new Expr_List_Cont();
 
-            if (CurrentToken == TokenCategory.COMA)
-            {
-                Expect(TokenCategory.COMA);
-                result.Add(Expr());
-                result.Add(Expr_List_Cont());
-            }
-
-            return result;
-        }
         public Node Expr()
         {
             return Expr_Or();
