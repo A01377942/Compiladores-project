@@ -7,7 +7,19 @@ namespace QuetzalDragon
 
     class Def_list : Node { }
 
-    class VarDefList : Node { }
+    class VarDefList : Node
+    {
+        public int NumberChildrens
+        {
+            get
+            {
+
+                return children.Count;
+            }
+
+        }
+
+    }
 
     class Stmt_Loop : Node { }
 

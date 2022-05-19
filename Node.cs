@@ -26,7 +26,7 @@ namespace QuetzalDragon
     class Node : IEnumerable<Node>
     {
 
-        IList<Node> children = new List<Node>();
+        protected IList<Node> children = new List<Node>();
 
         public Node this[int index]
         {
@@ -58,6 +58,8 @@ namespace QuetzalDragon
         {
             return $"{GetType().Name} {AnchorToken}";
         }
+
+
 
         public string ToStringTree()
         {

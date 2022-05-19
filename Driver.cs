@@ -67,12 +67,54 @@ namespace QuetzalDragon
                     new Scanner(input).Scan().GetEnumerator());
                 var program = parser.Program();
                 Console.Write(program.ToStringTree());
+                Console.WriteLine("Syntax OK.");
 
+                var semantic = new SemanticVisitor1();
+                semantic.Visit((dynamic)program);
+
+                Console.WriteLine("Semantics OK.");
+                Console.WriteLine();
+                Console.WriteLine("Primer visitor");
+                Console.WriteLine("Vgst Table");
+                Console.WriteLine("============");
+                foreach (var entry in semantic.Vgst)
+                {
+                    Console.WriteLine(entry);
+                }
+                Console.WriteLine();
+                Console.WriteLine("Fgst Table");
+                Console.WriteLine("============");
+                foreach (var entry in semantic.Fgst)
+                {
+                    Console.WriteLine(entry);
+                }
+                Console.WriteLine();
+                Console.WriteLine("Segundo visitor");
+                Console.WriteLine();
+                var semantic2 = new SemanticVisitor2(semantic.Fgst, semantic.Vgst);
+                semantic2.Visit((dynamic)program);
+
+
+                Console.WriteLine("Vgst Table");
+                Console.WriteLine("============");
+                foreach (var entry in semantic2.Vgst)
+                {
+                    Console.WriteLine(entry);
+                }
+                Console.WriteLine();
+                Console.WriteLine("lst Table");
+                Console.WriteLine("============");
+                foreach (var entry in semantic2.Fgst)
+                {
+                    Console.WriteLine(entry);
+
+
+                }
             }
             catch (Exception e)
             {
 
-                if (e is FileNotFoundException || e is SyntaxError)
+                if (e is FileNotFoundException || e is SyntaxError || e is SemanticError)
                 {
                     Console.Error.WriteLine(e.Message);
                     Environment.Exit(1);
