@@ -22,18 +22,20 @@ namespace QuetzalDragon
             private set;
         }
 
-
+        //Variables globales
         public ISet<string> Vgst
         {
             get;
             private set;
         }
-
+        //Variables locales
         public ISet<string> local_Lst
         {
             get;
             private set;
         }
+
+
         //-----------------------------------------------------------
         public SemanticVisitor2(IDictionary<string, Entry> Fgst, ISet<string> Vgst)
         {
@@ -55,6 +57,73 @@ namespace QuetzalDragon
         {
             VisitChildrenInDefList(node);
 
+        }
+
+        public void Visit(SUBSTRACTION node)
+        {
+
+            Visit((dynamic)node[0]);
+
+            Visit((dynamic)node[1]);
+        }
+        public void Visit(FUN_CALL node)
+        {
+            var nodoIdentificador = node[0];
+            var nombreFuncion = nodoIdentificador.AnchorToken.Lexeme;
+
+            //checar si existe funcion
+            if (Fgst.ContainsKey(nombreFuncion))
+            {
+
+                //checar numero de aurgumentos permitidos
+                int numeroParametros = Fgst[nombreFuncion].Arity;
+
+                Visit_Expr_List((dynamic)node[1], numeroParametros);
+            }
+            else
+            {
+
+                throw new SemanticError("funcion doesnt exist: " + nombreFuncion,
+                                        node[0].AnchorToken);
+            }
+        }
+
+        public void Visit_Expr_List(Expr_List node, int numeroParametros)
+        {
+            if (node.NumberChildrens == numeroParametros)
+            {
+                VisitChildren(node);
+            }
+            else
+            {
+                throw new SemanticError(
+                                        "function doesnt have correct number of arguments: ");
+            }
+        }
+
+        public void Visit(Identifier node)
+        {
+            //Buscar si ya se definio de manera loca o global la varibable.
+
+            var nombreVariable = node.AnchorToken.Lexeme;
+            //se busca de manera local
+            if (local_Lst.Contains(nombreVariable))
+            {
+
+
+            }
+            //se busca de manera global
+            else if (Vgst.Contains(nombreVariable))
+            {
+
+            }
+            //Variable no existe
+            else
+            {
+                throw new SemanticError(
+                                     "Variable doesnt exist: " + nombreVariable,
+                                     node.AnchorToken);
+            }
         }
 
         //funciona tanto para argumentos de funcion como para declaracion de variables.
@@ -84,29 +153,68 @@ namespace QuetzalDragon
         {
             foreach (var n in node)
             {
-                // //si resulta que la funcion si tiene parametros, entonces los lee.
-                // if (n.AnchorToken == null)
-                // {
-                //     Visit((dynamic)node[0]);
-                // }
 
                 Visit((dynamic)n);
 
             }
 
         }
-        public int VisitArgumentsDef(VarDefList node)
+        public void Visit(Stmt_Loop node)
         {
-            //si VarDefList en realidad esta definiendo variables, entonces
-            //regresa 0 parametros
-            if (node.AnchorToken != null)
+
+            Visit((dynamic)node[0]);
+        }
+
+        public void Visit(Stmt_If node)
+        {
+
+            //Visit((dynamic)node[0]);
+            VisitChildren(node);
+        }
+        public void Visit(Stmt_List node)
+        {
+
+            VisitChildren(node);
+        }
+
+        public void Visit(IntLiteral node)
+        {
+            int result;
+            if (!Int32.TryParse(node.AnchorToken.Lexeme, out result))
             {
-                return 0;
+                throw new SemanticError(
+                                  "int is not 32 bits: " + node.AnchorToken.Lexeme,
+                                  node.AnchorToken);
+            }
+        }
+
+        public void Visit(Assign node)
+        {
+            //Buscar si ya se definio de manera loca o global la varibable.
+            var nodoIdentificador = node[0];
+            var nombreVariable = nodoIdentificador.AnchorToken.Lexeme;
+
+            //se busca de manera local
+            if (local_Lst.Contains(nombreVariable))
+            {
+
+                Visit((dynamic)node[1]);
+            }
+            //se busca de manera global
+            else if (Vgst.Contains(nombreVariable))
+            {
+                Visit((dynamic)node[1]);
+            }
+            //Variable no existe
+            else
+            {
+                throw new SemanticError(
+                                     "Variable doesnt exist: " + nombreVariable,
+                                     nodoIdentificador.AnchorToken);
             }
 
-            return node.NumberChildrens;
-
         }
+
 
         //-----------------------------------------------------------
         void VisitChildren(Node node)
@@ -125,6 +233,7 @@ namespace QuetzalDragon
                 //en la primer pasada
                 if (n.GetType().Name.Equals("Fun_Def"))
                 {
+
 
                     Visit((dynamic)n);
 

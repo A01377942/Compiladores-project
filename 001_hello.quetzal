@@ -7,7 +7,11 @@
 var example1,example2;
 reverse(array) {
     var start, finish, temp;
-
+    finish = size(array) - 1;;;
+     loop {
+      
+      
+    }
 }
 var example3;
 

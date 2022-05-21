@@ -3,6 +3,7 @@
 namespace QuetzalDragon
 {
 
+    //Zabdiel
     class Program : Node { }
 
     class Def_list : Node { }
@@ -20,11 +21,38 @@ namespace QuetzalDragon
         }
 
     }
+    class Stmt_List : Node { }
+    class Fun_Def : Node { }
+    class Assign : Node { }
+
+    class IntLiteral : Node { }
+
+    class SUBSTRACTION : Node { }
+
+    class FUN_CALL : Node { }
+    class Expr_List : Node
+    {
+        public int NumberChildrens
+        {
+            get
+            {
+
+                return children.Count;
+            }
+
+        }
+    }
+    class Identifier : Node { }
 
     class Stmt_Loop : Node { }
 
-    class Stmt_Break : Node { }
+    class Stmt_If : Node { }
 
+
+    //--------------------------------
+    //Jonathan
+
+    class Stmt_Break : Node { }
     class Stmt_Return : Node { }
 
     class Expr_And : Node { }
@@ -40,33 +68,21 @@ namespace QuetzalDragon
 
     class NOT : Node { }
 
-    class FUN_CALL : Node { }
-
-    class SUBSTRACTION : Node { }
     class EQUAL_TO : Node { }
 
     class NOT_EQUAL_TO : Node { }
     class LESS_THAN : Node { }
     class LESS_EQUAL_THAN : Node { }
     class GREATHER_THAN : Node { }
+
+
+    //-------------------------
+    //Emiliano
     class GREATHER_EQUAL_THAN : Node { }
-    class Identifier : Node { }
-
-    class Fun_Def : Node { }
-
-    class Stmt_List : Node { }
-
-
     class Empty : Node { }
-    class Assign : Node { }
-
-    class Expr_List : Node { }
-
     class Stmt_Incr : Node { }
 
     class Stmt_Decr : Node { }
-
-    class Stmt_If : Node { }
 
     class Else_If_List : Node { }
 
@@ -78,10 +94,7 @@ namespace QuetzalDragon
 
     class Array : Node { }
 
-
     class Boolean : Node { }
-
-    class IntLiteral : Node { }
 
     class Character : Node { }
 

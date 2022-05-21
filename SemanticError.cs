@@ -11,5 +11,9 @@ namespace QuetzalDragon
                  + $"at row {token.Row}, column {token.Column}.")
         {
         }
+        public SemanticError(string message) :
+       base($"Semantic Error: {message}.")
+        {
+        }
     }
 }
