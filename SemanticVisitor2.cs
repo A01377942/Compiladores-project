@@ -35,6 +35,8 @@ namespace QuetzalDragon
             private set;
         }
 
+        private int loopLevel = 0;
+
 
         //-----------------------------------------------------------
         public SemanticVisitor2(IDictionary<string, Entry> Fgst, ISet<string> Vgst)
@@ -58,6 +60,7 @@ namespace QuetzalDragon
             VisitChildrenInDefList(node);
 
         }
+
 
         public void Visit(SUBSTRACTION node)
         {
@@ -161,8 +164,9 @@ namespace QuetzalDragon
         }
         public void Visit(Stmt_Loop node)
         {
-
+            loopLevel++;
             Visit((dynamic)node[0]);
+            loopLevel--;
         }
 
         public void Visit(Stmt_If node)
@@ -175,6 +179,16 @@ namespace QuetzalDragon
         {
 
             VisitChildren(node);
+        }
+
+        public void Visit(Stmt_Break node)
+        {
+            //Arroja un error semantico
+            if (loopLevel == 0)
+            {
+
+            }
+
         }
 
         public void Visit(IntLiteral node)
