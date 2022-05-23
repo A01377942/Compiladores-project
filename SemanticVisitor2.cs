@@ -229,6 +229,80 @@ namespace QuetzalDragon
 
         }
 
+        public void Visit(GREATHER_EQUAL_THAN node){
+            
+            Visit((dynamic) node[0]);
+            Visit((dynamic) node[1]);
+        }
+
+        public void Visit(Empty node){
+
+            
+        }
+
+        public void Visit(Stmt_Incr node){
+            Visit((dynamic) node[0]);
+        }
+
+        public void Visit(Stmt_Decr node){
+            Visit((dynamic) node[0]);
+        }
+
+        public void Visit(Else_If_List node){
+            VisitChildren(node);
+        }
+
+        public void Visit(Elif node){
+            VisitChildren(node);
+        }
+
+        public void Visit(Else node){
+            Visit((dynamic) node[0]);
+        }
+
+        public void Visit(Op_Unary node){
+            Visit((dynamic) node[0]);
+        }
+
+        public void Visit(Array node){
+            Visit((dynamic) node[0]);
+        }
+
+        public void Visit(Boolean node){
+            var result;
+
+            if(!Boolean.TryParse(node.AnchorToken.Lexeme, out result)){
+                throw new SemanticError(
+                    "Value is not boolean: " +
+                    node.AnchorToken.Lexeme,
+                    node.AnchorToken
+                )
+            }
+        }
+
+        public void Visit(Character node){
+            var result;
+
+            if(!Character.TryParse(node.AnchorToken.Lexeme, out result)){
+                throw new SemanticError(
+                    "Value is not boolean: " +
+                    node.AnchorToken.Lexeme,
+                    node.AnchorToken
+                )
+            }
+        }
+
+        public void Visit(String node){
+            var result;
+
+            if(!String.TryParse(node.AnchorToken.Lexeme, out result)){
+                throw new SemanticError(
+                    "Value is not boolean: " +
+                    node.AnchorToken.Lexeme,
+                    node.AnchorToken
+                )
+            }
+        }
 
         //-----------------------------------------------------------
         void VisitChildren(Node node)
