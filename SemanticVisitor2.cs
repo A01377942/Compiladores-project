@@ -236,8 +236,7 @@ namespace QuetzalDragon
         }
 
         public void Visit(Empty node){
-
-            
+            Visit((dynamic) node[0]);          
         }
 
         public void Visit(Stmt_Incr node){
@@ -269,39 +268,15 @@ namespace QuetzalDragon
         }
 
         public void Visit(Boolean node){
-            var result;
-
-            if(!Boolean.TryParse(node.AnchorToken.Lexeme, out result)){
-                throw new SemanticError(
-                    "Value is not boolean: " +
-                    node.AnchorToken.Lexeme,
-                    node.AnchorToken
-                )
-            }
+           Visit((dynamic) node[0]);
         }
 
         public void Visit(Character node){
-            var result;
-
-            if(!Character.TryParse(node.AnchorToken.Lexeme, out result)){
-                throw new SemanticError(
-                    "Value is not boolean: " +
-                    node.AnchorToken.Lexeme,
-                    node.AnchorToken
-                )
-            }
+            Visit((dynamic) node[0]);
         }
 
         public void Visit(String node){
-            var result;
-
-            if(!String.TryParse(node.AnchorToken.Lexeme, out result)){
-                throw new SemanticError(
-                    "Value is not boolean: " +
-                    node.AnchorToken.Lexeme,
-                    node.AnchorToken
-                )
-            }
+            Visit((dynamic) node[0]);
         }
 
         //-----------------------------------------------------------
