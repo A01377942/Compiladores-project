@@ -80,7 +80,7 @@ namespace QuetzalDragon
                 {"NotEqual", TokenCategory.NOT_EQUAL_TO},
                 {"LessEqualThan", TokenCategory.LESS_EQUAL_THAN},
                 {"GreaEqualThan", TokenCategory.GREATHER_EQUAL_THAN},
-                {"Less", TokenCategory.LESS},
+                {"Less", TokenCategory.LESS_THAN},
                 {"GreaterThan", TokenCategory.GREATHER_THAN},
                 {"Plus", TokenCategory.PLUS},
                 {"Substraction", TokenCategory.SUBSTRACTION},

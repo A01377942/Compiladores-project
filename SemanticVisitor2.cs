@@ -81,7 +81,7 @@ namespace QuetzalDragon
                 //checar numero de aurgumentos permitidos
                 int numeroParametros = Fgst[nombreFuncion].Arity;
 
-                Visit_Expr_List((dynamic)node[1], numeroParametros);
+                Visit_Expr_List((dynamic)node[1], numeroParametros,nodoIdentificador);
             }
             else
             {
@@ -91,7 +91,11 @@ namespace QuetzalDragon
             }
         }
 
-        public void Visit_Expr_List(Expr_List node, int numeroParametros)
+        public void Visit(Expr_List node){
+            VisitChildren(node);
+        }
+
+        public void Visit_Expr_List(Expr_List node, int numeroParametros,Node nodoIdentificador)
         {
             if (node.NumberChildrens == numeroParametros)
             {
@@ -100,7 +104,8 @@ namespace QuetzalDragon
             else
             {
                 throw new SemanticError(
-                                        "function doesnt have correct number of arguments: ");
+                                        "function '"+nodoIdentificador.AnchorToken.Lexeme+ "' doesnt have correct number of arguments "
+                                        ,nodoIdentificador.AnchorToken);
             }
         }
 
@@ -189,8 +194,6 @@ namespace QuetzalDragon
                 throw new SemanticError(
                                   "Break Statement is need in Loop:  " + node.AnchorToken.Lexeme,
                                   node.AnchorToken);
-            }else{
-                Visit((dynamic) node[0]);
             }
 
         }
@@ -202,6 +205,7 @@ namespace QuetzalDragon
         public void Visit(Expr_And node){
             Visit((dynamic) node[0]);
             Visit((dynamic) node[1]);
+            //VisitChildren(node);
         }
 
         public void Visit(Expr_Or node){
@@ -305,7 +309,7 @@ namespace QuetzalDragon
         }
 
         public void Visit(Empty node){
-            Visit((dynamic) node[0]);          
+           // Visit((dynamic) node[0]);          
         }
 
         public void Visit(Stmt_Incr node){
@@ -325,7 +329,8 @@ namespace QuetzalDragon
         }
 
         public void Visit(Else node){
-            Visit((dynamic) node[0]);
+           // Visit((dynamic) node[0]);
+           VisitChildren(node);
         }
 
         public void Visit(Op_Unary node){
@@ -337,15 +342,15 @@ namespace QuetzalDragon
         }
 
         public void Visit(Boolean node){
-           Visit((dynamic) node[0]);
+           //Visit((dynamic) node[0]);
         }
 
         public void Visit(Character node){
-            Visit((dynamic) node[0]);
+           // Visit((dynamic) node[0]);
         }
 
         public void Visit(String node){
-            Visit((dynamic) node[0]);
+           // Visit((dynamic) node[0]);
         }
 
         //-----------------------------------------------------------

@@ -653,9 +653,11 @@ namespace QuetzalDragon
             //var result = new Expr_Rel();
             //result.Add(Expr_add());
             var result = Expr_add();
+      
             while (CurrentToken == TokenCategory.LESS_THAN || CurrentToken == TokenCategory.LESS_EQUAL_THAN
             || CurrentToken == TokenCategory.GREATHER_THAN || CurrentToken == TokenCategory.GREATHER_EQUAL_THAN)
             {
+             
                 /*
                 switch (CurrentToken)
                 {
@@ -696,15 +698,18 @@ namespace QuetzalDragon
                 case TokenCategory.LESS_THAN:
                     //result.AnchorToken = Expect(TokenCategory.LESS_THAN);
                     // result.Add(Expr_add());
+                     
                     return new LESS_THAN()
                     {
                         AnchorToken = Expect(TokenCategory.LESS_THAN)
                     };
+                   
                     break;
                 case TokenCategory.LESS_EQUAL_THAN:
 
                     //result.AnchorToken = Expect(TokenCategory.LESS_EQUAL_THAN);
                     // result.Add(Expr_add());
+                    
                     return new LESS_EQUAL_THAN()
                     {
                         AnchorToken = Expect(TokenCategory.LESS_EQUAL_THAN)

@@ -50,11 +50,24 @@ namespace QuetzalDragon
             Fgst["get"] = new Entry(true, 2, null);
             Fgst["set"] = new Entry(true, 3, null);
         }
+
+        public void verificarMain(){
+
+            if(!Fgst.ContainsKey("main")){
+                throw new SemanticError(
+                        "program doesnt have main function defined");
+            }
+            if(Fgst["main"].Arity>0){
+  throw new SemanticError(
+                        "main function has one o more parameters");
+            }
+        }
+
         //-----------------------------------------------------------
         public void Visit(Program node)
         {
             Visit((dynamic)node[0]);
-
+            verificarMain();
         }
 
         //-----------------------------------------------------------
