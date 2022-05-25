@@ -186,10 +186,79 @@ namespace QuetzalDragon
             //Arroja un error semantico
             if (loopLevel == 0)
             {
+                throw new SemanticError(
+                                  "Break Statement is need in Loop:  " + node.AnchorToken.Lexeme,
+                                  node.AnchorToken);
+            }else{
 
             }
 
         }
+
+        public void Visit(Stmt_Return node){
+            Visit((dynamic) node[0]);
+        }
+
+        public void Visit(Expr_And node){
+            Visit((dynamic) node[0]);
+            Visit((dynamic) node[1]);
+        }
+
+        public void Visit(Expr_Or node){
+            Visit((dynamic) node[0]);
+            Visit((dynamic) node[1]);
+        }
+
+        public void Visit(PLUS node){
+            Visit((dynamic) node[0]);
+            Visit((dynamic) node[1]);
+           
+        }
+
+        public void Visit(MULTIPLICATION node){
+            Visit((dynamic) node[0]);
+            Visit((dynamic) node[1]);
+        }
+
+        public void Visit(DIVISION node){
+            Visit((dynamic) node[0]);
+            Visit((dynamic) node[1]);
+        }
+
+        public void Visit(REMINDER node){
+            Visit((dynamic) node[0]);
+            Visit((dynamic) node[1]);
+        }
+
+        public void Visit(NOT node){
+           Visit((dynamic)node[0]);
+        }
+
+        public void Visit(EQUAL_TO node){
+           VisitChildren(node);
+        }
+
+        public void Visit(NOT_EQUAL_TO node){
+            Visit((dynamic) node[0]);
+            Visit((dynamic) node[1]);
+        }
+
+        public void Visit(LESS_THAN node){
+            Visit((dynamic) node[0]);
+            Visit((dynamic) node[1]);
+        }
+
+        public void Visit(LESS_EQUAL_THAN node){
+            Visit((dynamic) node[0]);
+            Visit((dynamic) node[1]);
+        }
+
+        public void Visit(GREATHER_THAN node){
+            Visit((dynamic) node[0]);
+            Visit((dynamic) node[1]);
+        }
+
+
 
         public void Visit(IntLiteral node)
         {

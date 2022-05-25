@@ -10,7 +10,7 @@ reverse(array) {
     finish = size(array) - 1;;;
      loop {
       
-      
+      break;
     }
 }
 var example3;

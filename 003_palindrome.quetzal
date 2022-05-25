@@ -1,0 +1,18 @@
+/* File: breaks.quetzal
+   Verifies that the implementation of the break statement meets the
+   specified requirements.
+   (C) 2022 Ariel Ortiz, ITESM CEM.
+ */
+
+sqr(x) {
+    return x * x;
+}
+
+main() {
+    var array, sum, i, j, x;
+    j = 1;
+    x  = 10;
+    if (j < x) {
+        break;
+    } 
+}
