@@ -190,7 +190,7 @@ namespace QuetzalDragon
                                   "Break Statement is need in Loop:  " + node.AnchorToken.Lexeme,
                                   node.AnchorToken);
             }else{
-
+                Visit((dynamic) node[0]);
             }
 
         }
