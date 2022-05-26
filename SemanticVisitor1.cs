@@ -101,8 +101,15 @@ namespace QuetzalDragon
         public void Visit(Fun_Def node)
         {
             var variableName = node.AnchorToken.Lexeme;
-            var arity = VisitArgumentsDef((dynamic)node[0]);
-            // var variableName = node[0].AnchorToken.Lexeme;
+            var arity=0;
+             if (node.NumberChildrens>0 && node[0].GetType().Name.Equals("VarDefList"))
+                {
+                    arity = VisitArgumentsDef((dynamic)node[0]);
+                }
+
+
+            //var arity = VisitArgumentsDef((dynamic)node[0]);
+            //var arity=node.NumberChildrens>0?VisitArgumentsDef((dynamic)node[0]):0;
 
             if (Fgst.ContainsKey(variableName))
             {

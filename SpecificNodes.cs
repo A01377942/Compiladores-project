@@ -22,12 +22,32 @@ namespace QuetzalDragon
 
     }
     class Stmt_List : Node { }
-    class Fun_Def : Node { }
+    class Fun_Def : Node {
+        public int NumberChildrens
+        {
+            get
+            {
+
+                return children.Count;
+            }
+
+        }
+     }
     class Assign : Node { }
 
     class IntLiteral : Node { }
 
-    class SUBSTRACTION : Node { }
+    class SUBSTRACTION : Node {
+        public int NumberChildrens
+        {
+            get
+            {
+
+                return children.Count;
+            }
+
+        }
+     }
 
     class FUN_CALL : Node { }
     class Expr_List : Node
@@ -59,7 +79,17 @@ namespace QuetzalDragon
 
     class Expr_Or : Node { }
 
-    class PLUS : Node { }
+    class PLUS : Node {
+                public int NumberChildrens
+        {
+            get
+            {
+
+                return children.Count;
+            }
+
+        }
+     }
     class MULTIPLICATION : Node { }
 
     class DIVISION : Node { }

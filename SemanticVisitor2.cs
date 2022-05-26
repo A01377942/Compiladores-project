@@ -65,9 +65,16 @@ namespace QuetzalDragon
         public void Visit(SUBSTRACTION node)
         {
 
-            Visit((dynamic)node[0]);
+            if(node.NumberChildrens==1){
 
-            Visit((dynamic)node[1]);
+                Visit((dynamic)node[0]);
+            
+            }
+            else
+            {
+                Visit((dynamic)node[0]);
+                Visit((dynamic)node[1]);
+            }
         }
         public void Visit(FUN_CALL node)
         {
@@ -214,8 +221,16 @@ namespace QuetzalDragon
         }
 
         public void Visit(PLUS node){
-            Visit((dynamic) node[0]);
-            Visit((dynamic) node[1]);
+               if(node.NumberChildrens==1){
+
+                Visit((dynamic)node[0]);
+            
+            }
+            else
+            {
+                Visit((dynamic)node[0]);
+                Visit((dynamic)node[1]);
+            }
            
         }
 

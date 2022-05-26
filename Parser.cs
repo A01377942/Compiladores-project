@@ -937,10 +937,14 @@ namespace QuetzalDragon
                 case TokenCategory.CHARACTER:
                     return Expr_primary();
                     break;
+                case TokenCategory.PARENTHESIS_OPEN:
+                    return Expr_primary();
+                    break;
                 case TokenCategory.STRING:
                     return Expr_primary();
                     break;
                 default:
+                    
                     throw new SyntaxError(expr_Primary_Values, tokenStream.Current);
             }
             //return result;
@@ -1031,8 +1035,9 @@ namespace QuetzalDragon
                 case TokenCategory.PARENTHESIS_OPEN:
                     Expect(TokenCategory.PARENTHESIS_OPEN);
                     // result.Add(Expr());
-                    return Expr();
+                    var resultado=Expr();
                     Expect(TokenCategory.PARENTHESIS_CLOSE);
+                    return resultado;
                     break;
                 default:
                     throw new SyntaxError(Lit_Values, tokenStream.Current);
