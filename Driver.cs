@@ -19,7 +19,8 @@ namespace QuetzalDragon
         static readonly string[] ReleaseIncludes = {
             "Lexical analysis",
             "Syntactic analysis",
-            "AST construction"
+            "AST construction",
+            "Wat code generation"
         };
 
         //----------------------------------------------------------
@@ -62,6 +63,7 @@ namespace QuetzalDragon
             try
             {
                 var inputPath = args[0];
+                var outputPath = Path.ChangeExtension(inputPath, ".wat");
                 var input = File.ReadAllText(inputPath);
                 var parser = new Parser(
                     new Scanner(input).Scan().GetEnumerator());
@@ -110,6 +112,14 @@ namespace QuetzalDragon
 
 
                 }
+
+                var codeGenerator = new WatVisitor(semantic2.Vgst);
+                File.WriteAllText(
+                    outputPath,
+                    codeGenerator.Visit((dynamic) program));
+                Console.WriteLine(
+                    "Created Wat (WebAssembly text format) file "
+                    + $"'{outputPath}'.");
             }
             catch (Exception e)
             {

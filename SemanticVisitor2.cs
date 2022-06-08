@@ -369,7 +369,7 @@ namespace QuetzalDragon
         }
 
         //-----------------------------------------------------------
-        void VisitChildren(Node node)
+        public void VisitChildren(Node node)
         {
             foreach (var n in node)
             {
@@ -377,7 +377,7 @@ namespace QuetzalDragon
             }
         }
 
-        void VisitChildrenInDefList(Node node)
+        public void VisitChildrenInDefList(Node node)
         {
             foreach (var n in node)
             {

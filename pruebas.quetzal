@@ -1,0 +1,11 @@
+/* File: 001_hello.quetzal
+   The classical "hello, world" program.
+   (C) 2022 Ariel Ortiz, ITESM CEM.
+*/
+var start, finish, temp;
+main() {
+   var a;
+    //ejemplo=1;
+    //prints("hello, world\n");;;
+    //return 42;;;
+}

@@ -18,11 +18,11 @@
 
 quetzalDragon.exe: Driver.cs Scanner.cs Token.cs TokenCategory.cs Parser.cs \
 	SyntaxError.cs Node.cs SpecificNodes.cs SemanticVisitor1.cs \
-	SemanticVisitor2.cs  SemanticError.cs Entry.cs
+	SemanticVisitor2.cs  SemanticError.cs Entry.cs WatVisitor.cs
 
 	mcs -out:quetzalDragon.exe Driver.cs Scanner.cs Token.cs TokenCategory.cs \
 	Parser.cs SyntaxError.cs Node.cs SpecificNodes.cs SemanticVisitor1.cs \
-	SemanticVisitor2.cs  SemanticError.cs Entry.cs
+	SemanticVisitor2.cs  SemanticError.cs Entry.cs WatVisitor.cs
 
 clean:
 
