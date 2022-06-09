@@ -2,10 +2,11 @@
    The classical "hello, world" program.
    (C) 2022 Ariel Ortiz, ITESM CEM.
 */
-var start, finish, temp;
+var start;
 main() {
    var a;
-    //ejemplo=1;
-    //prints("hello, world\n");;;
+    start=1;
+    a=2;
+    prints(a);
     //return 42;;;
 }

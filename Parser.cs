@@ -366,6 +366,7 @@ namespace QuetzalDragon
                         case TokenCategory.PARENTHESIS_OPEN:
                             //
                             var result3 = new FUN_CALL();
+                            result3.isStatement=true;
                             result3.Add(new Identifier()
                             {
                                 AnchorToken = token
@@ -988,6 +989,7 @@ namespace QuetzalDragon
                     if (CurrentToken == TokenCategory.PARENTHESIS_OPEN)
                     {
                         var result = new FUN_CALL();
+                        result.isStatement=false;
                         result.Add(new Identifier()
                         {
                             AnchorToken = token

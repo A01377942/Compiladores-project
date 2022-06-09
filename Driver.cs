@@ -104,7 +104,7 @@ namespace QuetzalDragon
                     Console.WriteLine(entry);
                 }
                 Console.WriteLine();
-                Console.WriteLine("lst Table");
+                Console.WriteLine("Fgst Table");
                 Console.WriteLine("============");
                 foreach (var entry in semantic2.Fgst)
                 {
@@ -113,10 +113,8 @@ namespace QuetzalDragon
 
                 }
 
-                var codeGenerator = new WatVisitor(semantic2.Vgst);
-                File.WriteAllText(
-                    outputPath,
-                    codeGenerator.Visit((dynamic) program));
+                var codeGenerator = new WatVisitor(semantic2.Fgst,semantic2.Vgst);
+                File.WriteAllText(outputPath,codeGenerator.Visit((dynamic) program));
                 Console.WriteLine(
                     "Created Wat (WebAssembly text format) file "
                     + $"'{outputPath}'.");

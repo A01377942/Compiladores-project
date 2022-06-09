@@ -12,13 +12,17 @@
   (import "quetzal" "add" (func $add (param i32 i32) (result i32)))
   (import "quetzal" "get" (func $get (param i32 i32) (result i32)))
   (import "quetzal" "set" (func $set (param i32 i32 i32) (result i32)))
+  (global $start (mut i32) (i32.const 0))
   (func
-    (export "start")
+    (export "main")
     (result i32)
-    (global $start (mut i32) (i32.const 0))
-    (global $finish (mut i32) (i32.const 0))
-    (global $temp (mut i32) (i32.const 0))
+    (local $a i32)
+    i32.const 1
+    global.set $start
+    i32.const 2
     local.set $a
+    local.get $a
+   call $prints
     i32.const 0
   )
 )
