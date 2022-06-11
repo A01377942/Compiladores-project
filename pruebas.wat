@@ -12,17 +12,46 @@
   (import "quetzal" "add" (func $add (param i32 i32) (result i32)))
   (import "quetzal" "get" (func $get (param i32 i32) (result i32)))
   (import "quetzal" "set" (func $set (param i32 i32 i32) (result i32)))
-  (global $start (mut i32) (i32.const 0))
+
+  (func $reverse
+  (param $array i32)
+  (result i32)
+   (local $_temp i32)
+    (local $start i32)
+    (local $finish i32)
+    (local $temp i32)
+   i32.const 0
+   return
+  )
+  (func $binary
+  (param $num i32)
+  (result i32)
+   (local $_temp i32)
+    (local $result i32)
+    (local $remainder i32)
+   i32.const 0
+   return
+  )
   (func
     (export "main")
     (result i32)
-    (local $a i32)
+   (local $_temp i32)
+    (local $option i32)
+    (local $num i32)
+    local.get $num
+   call $binary
+   drop
+;;loop 
+    block  $00000
+      loop  $00001
     i32.const 1
-    global.set $start
-    i32.const 2
-    local.set $a
-    local.get $a
-   call $prints
+   if
+    i32.const 1
+    br  $00000
+   end
+    br  $00001
+      end
+    end
     i32.const 0
   )
 )

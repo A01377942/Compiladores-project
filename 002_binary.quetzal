@@ -7,7 +7,7 @@
 reverse(array) {
     var start, finish, temp;
     start = 0;
-    finish = size(array) - 1;
+    finish = size(array);
     loop {
         if (start >= finish) {
            break;

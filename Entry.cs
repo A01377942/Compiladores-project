@@ -57,6 +57,23 @@ namespace QuetzalDragon
             }
             return result;
         }
+        public string[] arrayLst(){
+            
+            var result = new string[Lst.Count];
+            var index=0;
+            if (Lst != null)
+            {
+
+                foreach (string value in Lst)
+                {
+                   result[index]=value;
+                   index++;
+                }
+            }
+            return result;
+
+        }
+        
 
         public override string ToString()
         {
