@@ -53,8 +53,8 @@ namespace QuetzalDragon {
                 + "  (import \"quetzal\" \"add\" (func $add (param i32 i32) (result i32)))\n"
                 + "  (import \"quetzal\" \"get\" (func $get (param i32 i32) (result i32)))\n"
                 + "  (import \"quetzal\" \"set\" (func $set (param i32 i32 i32) (result i32)))\n"
-                + declareGlobalVariables()
-                + Visit((dynamic) node[0])
+                +       declareGlobalVariables()
+                +       Visit((dynamic) node[0])
                 + "    i32.const 0\n"
                 + "  )\n"
                 + ")\n";
@@ -303,8 +303,61 @@ namespace QuetzalDragon {
             return sb.ToString();
         }
 
+        //Jonathan Implementations
+
+        public string VisitChildren(MULTIPLICATION node) {
+            return VisitBinaryOperator("i32.mul", node);
+        }
+
+        public string VisitChildren(Stmt_Break node) {
+
+        }
+
+        public string VisitChildren(Stmt_Return node) {
+
+        }
+
+        public string VisitChildren(Expr_And node) {
+            return VisitBinaryOperator("i32.and", node);
+        }
+
+        public string VisitChildren(Expr_Or node) {
+            return VisitBinaryOperator("i32.or", node);
+        }
+
+        public string VisitChildren(PLUS node) {
+            return VisitBinaryOperator("i32.add", node);
+        }
+        
+        public string VisitChildren(DIVISION node) {
+            return VisitBinaryOperator("i32.div_s", node);
+        }
+
+        public string VisitChildren(REMINDER node) {
+            return VisitBinaryOperator("i32.rem_s", node);
+        }
+
+        public string VisitChildren(NOT node) {
+
+        }
+
+        public string VisitChildren(EQUAL_TO node) {
+            return VisitBinaryOperator("i32.eq", node);
+        }
+
+        public string VisitChildren(NOT_EQUAL_TO node) {
+            return VisitBinaryOperator("i32.ne", node);
+        }
+        public string VisitChildren(LESS_THAN node) {
+            return VisitBinaryOperator("i32.lt_s", node);
+        }
+        public string VisitChildren(LESS_EQUAL_THAN node) {
+            return VisitBinaryOperator("i32.le_s", node);
+        }
+
 
         //Declara variables
+        //funciona tanto para argumentos de funcion como para declaracion de variables.
         public string Visit(VarDefList node)
         {
             var sb = new StringBuilder();
@@ -330,6 +383,10 @@ namespace QuetzalDragon {
             return $"    (local ${node.AnchorToken.Lexeme} i32)\n";
         }
 
-
+        string VisitBinaryOperator(string op, Node node) {
+            return Visit((dynamic) node[0])
+                + Visit((dynamic) node[1])
+                + $"    {op}\n";
+        }
     }
 }

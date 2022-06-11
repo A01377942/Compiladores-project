@@ -1,4 +1,6 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -6,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue May 24 20:43:11 2022
+# Make data base, printed on Fri Jun 10 23:31:23 2022
 
 # Variables
 
@@ -47,7 +49,7 @@ VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupp
 # environment
 _ = /usr/share/code/code
 # environment
-JOURNAL_STREAM = 8:46800
+JOURNAL_STREAM = 8:45961
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # makefile (from 'Makefile', line 1)
@@ -67,7 +69,7 @@ DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-MANAGERPID = 1586
+MANAGERPID = 1537
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
@@ -83,7 +85,7 @@ GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-SESSION_MANAGER = local/jrosaspc-HP-ZBook-14:@/tmp/.ICE-unix/1815,unix/jrosaspc-HP-ZBook-14:/tmp/.ICE-unix/1815
+SESSION_MANAGER = local/jrosaspc-HP-ZBook-14:@/tmp/.ICE-unix/1763,unix/jrosaspc-HP-ZBook-14:/tmp/.ICE-unix/1763
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -93,7 +95,7 @@ VSCODE_LOG_STACK = false
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-INVOCATION_ID = 55d39bb99f174b8aa466c92ef052770b
+INVOCATION_ID = eb0247f7288b4d27a60c4cfa152b6f3b
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -103,7 +105,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 3254
+GIO_LAUNCHED_DESKTOP_FILE_PID = 22743
 # automatic
 %F = $(notdir $%)
 # environment
@@ -115,7 +117,7 @@ PWD = /home/jrosas-pc/Documents/Compiladores_Project/Compiladores-project
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 1777
+SSH_AGENT_PID = 1725
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
@@ -127,7 +129,7 @@ HOME = /home/jrosas-pc
 # environment
 LESSCLOSE = /usr/bin/lesspipe %s %s
 # environment
-VSCODE_CODE_CACHE_PATH = /home/jrosas-pc/.config/Code/CachedData/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
+VSCODE_CODE_CACHE_PATH = /home/jrosas-pc/.config/Code/CachedData/4af164ea3a06f701fe3e89a2bcbb421d2026b68f
 # environment
 LOGNAME = jrosas-pc
 # environment
@@ -153,7 +155,7 @@ SHLVL = 0
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-f06823cb-2429-40c4-8620-bdaeef245596.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-fbb2f963-03b0-4827-a28a-88b988faf0bd.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -175,7 +177,7 @@ MAKE_COMMAND := make
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-bfa4891e-1.67.2-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-bfa4891e-1.68.0-main.sock
 # makefile
 MAKEFLAGS = pqrR
 # environment
@@ -221,7 +223,7 @@ LC_ADDRESS = es_MX.UTF-8
 # environment
 LANG = C
 # environment
-VSCODE_PID = 3254
+VSCODE_PID = 22743
 # variable set hash-table stats:
 # Load=106/1024=10%, Rehash=0, Collisions=18/131=14%
 
@@ -231,9 +233,9 @@ VSCODE_PID = 3254
 
 # Directories
 
-# . (device 2055, inode 1328356): 23 files, no impossibilities.
+# . (device 2055, inode 1328356): 24 files, no impossibilities.
 
-# 23 files, no impossibilities in 1 directories.
+# 24 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -280,8 +282,6 @@ SemanticVisitor1.cs:
 #  File has not been updated.
 
  
-make: *** No rule to make target 'all'.  Stop.
-
 # Not a target:
 Entry.cs:
 #  Implicit rule search has not been done.
@@ -360,12 +360,12 @@ Scanner.cs:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 29 / storage = 351 B / avg = 12 B
-# current buf: size = 8162 B / used = 351 B / count = 29 / avg = 12 B
+# strcache buffers: 1 (0) / strings = 30 / storage = 374 B / avg = 12 B
+# current buf: size = 8162 B / used = 374 B / count = 30 / avg = 12 B
 
-# strcache performance: lookups = 48 / hit rate = 39%
+# strcache performance: lookups = 49 / hit rate = 38%
 # hash-table stats:
-# Load=29/8192=0%, Rehash=0, Collisions=1/48=2%
-# Finished Make data base on Tue May 24 20:43:11 2022
+# Load=30/8192=0%, Rehash=0, Collisions=1/49=2%
+# Finished Make data base on Fri Jun 10 23:31:23 2022
 
  
