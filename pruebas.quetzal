@@ -1,29 +1,10 @@
-/* File: 002_binary.quetzal
-   Converts decimal numbers into binary.
+/* File: 001_hello.quetzal
+   The classical "hello, world" program.
    (C) 2022 Ariel Ortiz, ITESM CEM.
 */
 
-// Inverts in-place the contents of an array list.
-reverse(array) {
-    var start, finish, temp;
-
-}
-
-// Converts num to a string with its binary representation.
-binary(num) {
-    var result, remainder;
-
-    
-
-}
-
 main() {
-    var option, num;
-    binary(num);
-    loop {
-
-        if (1) {
-            break;
-        }
-    }
+    var a;
+   a=2*2;
+   return a;
 }
