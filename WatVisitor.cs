@@ -384,15 +384,85 @@ namespace QuetzalDragon
         //Zab
         public string Visit(String Node)
         {
+            var sb = new StringBuilder();
             var stringLexeme = Node.AnchorToken.Lexeme;
             var newString = stringLexeme.Substring(1, stringLexeme.Length - 2);
-            Console.WriteLine(newString);
+            var charArray = newString.ToCharArray();
+            var index = 0;
+            var stringSize = 0;
+
+            //Recorrer el String que esta en un arreglo de characters
+            while (index < charArray.Length)
+            {
+                //Si solamente es un character normal, ex 'A', agregar su codigo
+                if (charArray[index].ToString() != @"\")
+                {
+
+                    sb.Append("i32.const " + AsCodePoints(charArray[index].ToString())[0] + ";; " + charArray[index].ToString() + "\n");
+                    sb.Append("call $add\n");
+                    sb.Append("drop\n");
+                    sb.Append("\n");
+                    index++;
+                    stringSize++;
+                }
+                //Si contiene el character "\", entonces validar si ...
+                else
+                {
+                    //validar si se puede saber su valor completo, ex "\n", "\r".
+                    if (index + 1 < charArray.Length)
+                    {
+                        switch (charArray[index + 1])
+                        {
+                            //Si en realidad es "/n", entonces agrega su codigo
+                            case 'n':
+                                sb.Append("i32.const 10" + ";; " + @"\n" + "\n");
+                                sb.Append("call $add\n");
+                                sb.Append("drop\n");
+                                sb.Append("\n");
+                                index += 2;
+                                stringSize++;
+                                break;
+                            //falta agregar mas casos
+
+                            //Si en realidad solo es el character "\" , entonces agregar su codigo
+                            default:
+                                sb.Append("i32.const " + AsCodePoints(charArray[index].ToString())[0] + ";; " + charArray[index].ToString() + "\n");
+                                sb.Append("call $add\n");
+                                sb.Append("drop\n");
+                                sb.Append("\n");
+                                index++;
+                                stringSize++;
+                                break;
+                        }
+                    }
+
+                    //Si en realidad tienes un caso como "\",entonces
+                    else
+                    {
+
+                        sb.Append("i32.const " + AsCodePoints(charArray[index].ToString())[0] + ";; " + charArray[index].ToString() + "\n");
+                        sb.Append("call $add\n");
+                        sb.Append("drop\n");
+                        sb.Append("\n");
+                        index++;
+                        stringSize++;
+                    }
+                }
 
 
-            var sb = new StringBuilder();
+            }
+            var sb2 = new StringBuilder();
+            sb2.Append(" i32.const 0\n");
+            sb2.Append(" call $new\n");
+            sb2.Append(" local.set $_temp\n");
+            for (int i = 0; i < stringSize + 1; i++)
+            {
+                sb2.Append(" local.get $_temp\n");
+            }
 
-
-            return sb.ToString();
+            sb2.Append("\n");
+            sb2.Append(sb.ToString());
+            return sb2.ToString();
         }
 
         public string Visit(MULTIPLICATION node)
@@ -407,7 +477,6 @@ namespace QuetzalDragon
             sb.Append("   i32.mul\n");
             return sb.ToString();
         }
-
 
         //Jonathan Implementations
 

@@ -4,7 +4,6 @@
 */
 
 main() {
-    var a;
-   a=2*2;
-   return a;
+    prints("hello, world\n");;;
+    return 42;;;
 }

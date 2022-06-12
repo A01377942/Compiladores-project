@@ -17,12 +17,79 @@
     (export "main")
     (result i32)
    (local $_temp i32)
-    (local $a i32)
-    i32.const 2
-    i32.const 2
-   i32.mul
-    local.set $a
-    local.get $a
+ i32.const 0
+ call $new
+ local.set $_temp
+ local.get $_temp
+ local.get $_temp
+ local.get $_temp
+ local.get $_temp
+ local.get $_temp
+ local.get $_temp
+ local.get $_temp
+ local.get $_temp
+ local.get $_temp
+ local.get $_temp
+ local.get $_temp
+ local.get $_temp
+ local.get $_temp
+ local.get $_temp
+
+i32.const 104;; h
+call $add
+drop
+
+i32.const 101;; e
+call $add
+drop
+
+i32.const 108;; l
+call $add
+drop
+
+i32.const 108;; l
+call $add
+drop
+
+i32.const 111;; o
+call $add
+drop
+
+i32.const 44;; ,
+call $add
+drop
+
+i32.const 32;;  
+call $add
+drop
+
+i32.const 119;; w
+call $add
+drop
+
+i32.const 111;; o
+call $add
+drop
+
+i32.const 114;; r
+call $add
+drop
+
+i32.const 108;; l
+call $add
+drop
+
+i32.const 100;; d
+call $add
+drop
+
+i32.const 10;; \n
+call $add
+drop
+
+   call $prints
+   drop
+    i32.const 42
    return
   )
 )
