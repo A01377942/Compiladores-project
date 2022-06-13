@@ -199,7 +199,13 @@ namespace QuetzalDragon
             //Se evalua el boleano
             sb.Append(Visit((dynamic)node[0]));
             sb.Append("   if\n");
-            sb.Append(VisitChildren(node));
+            //sb.Append(VisitChildren(node));
+            //statement list
+            sb.Append(Visit((dynamic)node[1]));
+            //Else_If_List
+            sb.Append(Visit((dynamic)node[2]));
+            //Else
+            sb.Append(Visit((dynamic)node[3]));
             sb.Append("   end\n");
             return sb.ToString();
         }
@@ -649,20 +655,53 @@ namespace QuetzalDragon
 
         public string Visit(Stmt_Incr node)
         {
+            var variable = (dynamic)node[0].AnchorToken.Lexeme;
+
+            var result = "";
+            //Analizar si mi variable es local o global
+            //Si es local
+            if (Fgst[currentFunction].Lst.Contains(variable))
+            {
+                result = $"    local.set ${variable}\n";
+            }
+            //Si es global
+            else
+            {
+                result = $"    global.set ${variable}\n";
+            }
 
             var sb = new StringBuilder();
             sb.Append(Visit((dynamic)node[0]));
             sb.Append("     i32.const 1\n");
             sb.Append("     i32.add\n");
+            sb.Append(result);
             return sb.ToString();
         }
 
         public string Visit(Stmt_Decr node)
         {
+
+            var variable = (dynamic)node[0].AnchorToken.Lexeme;
+
+            var result = "";
+            //Analizar si mi variable es local o global
+            //Si es local
+            if (Fgst[currentFunction].Lst.Contains(variable))
+            {
+                result = $"    local.set ${variable}\n";
+            }
+            //Si es global
+            else
+            {
+                result = $"    global.set ${variable}\n";
+            }
+
+
             var sb = new StringBuilder();
             sb.Append(Visit((dynamic)node[0]));
             sb.Append("     i32.const 1\n");
             sb.Append("     i32.sub\n");
+            sb.Append(result);
             return sb.ToString();
 
         }
