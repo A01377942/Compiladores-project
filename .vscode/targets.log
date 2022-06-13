@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun 10 23:31:23 2022
+# Make data base, printed on Sun Jun 12 23:22:53 2022
 
 # Variables
 
@@ -49,7 +49,7 @@ VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupp
 # environment
 _ = /usr/share/code/code
 # environment
-JOURNAL_STREAM = 8:45961
+JOURNAL_STREAM = 8:48184
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # makefile (from 'Makefile', line 1)
@@ -69,7 +69,7 @@ DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-MANAGERPID = 1537
+MANAGERPID = 1547
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
@@ -85,7 +85,7 @@ GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-SESSION_MANAGER = local/jrosaspc-HP-ZBook-14:@/tmp/.ICE-unix/1763,unix/jrosaspc-HP-ZBook-14:/tmp/.ICE-unix/1763
+SESSION_MANAGER = local/jrosaspc-HP-ZBook-14:@/tmp/.ICE-unix/1778,unix/jrosaspc-HP-ZBook-14:/tmp/.ICE-unix/1778
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -95,7 +95,7 @@ VSCODE_LOG_STACK = false
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-INVOCATION_ID = eb0247f7288b4d27a60c4cfa152b6f3b
+INVOCATION_ID = 8c407acf61a14e11a3398c16060fe4c2
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -105,7 +105,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 22743
+GIO_LAUNCHED_DESKTOP_FILE_PID = 4124
 # automatic
 %F = $(notdir $%)
 # environment
@@ -117,7 +117,7 @@ PWD = /home/jrosas-pc/Documents/Compiladores_Project/Compiladores-project
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 1725
+SSH_AGENT_PID = 1740
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
@@ -155,7 +155,7 @@ SHLVL = 0
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-fbb2f963-03b0-4827-a28a-88b988faf0bd.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-9fc87853-8678-4b47-ab36-bf0b40068545.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -223,7 +223,7 @@ LC_ADDRESS = es_MX.UTF-8
 # environment
 LANG = C
 # environment
-VSCODE_PID = 22743
+VSCODE_PID = 4124
 # variable set hash-table stats:
 # Load=106/1024=10%, Rehash=0, Collisions=18/131=14%
 
@@ -233,9 +233,9 @@ VSCODE_PID = 22743
 
 # Directories
 
-# . (device 2055, inode 1328356): 24 files, no impossibilities.
+# . (device 2055, inode 1328356): 36 files, no impossibilities.
 
-# 24 files, no impossibilities in 1 directories.
+# 36 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -271,7 +271,7 @@ Driver.cs:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-24 17:27:12.024355179
+#  Last modified 2022-06-10 23:31:38.431877329
 #  File has been updated.
 #  Successfully updated.
 
@@ -284,6 +284,12 @@ SemanticVisitor1.cs:
  
 # Not a target:
 Entry.cs:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+WatVisitor.cs:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -337,14 +343,14 @@ SyntaxError.cs:
 #  Modification time never checked.
 #  File has not been updated.
 
-quetzalDragon.exe: Driver.cs Scanner.cs Token.cs TokenCategory.cs Parser.cs SyntaxError.cs Node.cs SpecificNodes.cs SemanticVisitor1.cs SemanticVisitor2.cs SemanticError.cs Entry.cs
+quetzalDragon.exe: Driver.cs Scanner.cs Token.cs TokenCategory.cs Parser.cs SyntaxError.cs Node.cs SpecificNodes.cs SemanticVisitor1.cs SemanticVisitor2.cs SemanticError.cs Entry.cs WatVisitor.cs
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 23):
 	mcs -out:quetzalDragon.exe Driver.cs Scanner.cs Token.cs TokenCategory.cs \
 	Parser.cs SyntaxError.cs Node.cs SpecificNodes.cs SemanticVisitor1.cs \
-	SemanticVisitor2.cs  SemanticError.cs Entry.cs
+	SemanticVisitor2.cs  SemanticError.cs Entry.cs WatVisitor.cs
 
 # Not a target:
 Scanner.cs:
@@ -353,19 +359,19 @@ Scanner.cs:
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=18/1024=2%, Rehash=0, Collisions=0/40=0%
+# Load=19/1024=2%, Rehash=0, Collisions=0/42=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 30 / storage = 374 B / avg = 12 B
-# current buf: size = 8162 B / used = 374 B / count = 30 / avg = 12 B
+# strcache buffers: 1 (0) / strings = 42 / storage = 575 B / avg = 13 B
+# current buf: size = 8162 B / used = 575 B / count = 42 / avg = 13 B
 
-# strcache performance: lookups = 49 / hit rate = 38%
+# strcache performance: lookups = 62 / hit rate = 32%
 # hash-table stats:
-# Load=30/8192=0%, Rehash=0, Collisions=1/49=2%
-# Finished Make data base on Fri Jun 10 23:31:23 2022
+# Load=42/8192=1%, Rehash=0, Collisions=1/62=2%
+# Finished Make data base on Sun Jun 12 23:22:53 2022
 
  

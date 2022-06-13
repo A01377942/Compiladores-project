@@ -465,79 +465,127 @@ namespace QuetzalDragon
             return sb2.ToString();
         }
 
+        //Jonathan Implementations
+
         public string Visit(MULTIPLICATION node)
         {
             var sb = new StringBuilder();
-            //Como la multiplicacion siempre tiene dos hijos
-            //primero obtienes el valor de los hijos
             sb.Append(Visit((dynamic)node[0]));
             sb.Append(Visit((dynamic)node[1]));
 
-            //despues multiplicas
-            sb.Append("   i32.mul\n");
+            sb.Append("     i32.mul\n");
             return sb.ToString();
         }
 
-        //Jonathan Implementations
-
-        public string VisitChildren(MULTIPLICATION node)
+        public string Visit(Expr_And node)
         {
-            return VisitBinaryOperator("i32.mul", node);
-        }
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
+            sb.Append(Visit((dynamic)node[1]));
 
-        public string VisitChildren(Expr_And node)
-        {
-            return VisitBinaryOperator("i32.and", node);
+            sb.Append("   i32.and\n");
+            return sb.ToString();
         }
 
-        public string VisitChildren(Expr_Or node)
+        public string Visit(Expr_Or node)
         {
-            return VisitBinaryOperator("i32.or", node);
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
+            sb.Append(Visit((dynamic)node[1]));
+
+            sb.Append("     i32.or\n");
+            return sb.ToString();
         }
 
-        public string VisitChildren(PLUS node)
+        public string Visit(PLUS node)
         {
-            return VisitBinaryOperator("i32.add", node);
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
+            sb.Append(Visit((dynamic)node[1]));
+
+            sb.Append("     i32.add\n");
+            return sb.ToString();
         }
 
-        public string VisitChildren(DIVISION node)
+        public string Visit(DIVISION node)
         {
-            return VisitBinaryOperator("i32.div_s", node);
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
+            sb.Append(Visit((dynamic)node[1]));
+
+            sb.Append("     i32.div_s\n");
+            return sb.ToString();
         }
 
-        public string VisitChildren(REMINDER node)
+        public string Visit(REMINDER node)
         {
-            return VisitBinaryOperator("i32.rem_s", node);
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
+            sb.Append(Visit((dynamic)node[1]));
+
+            sb.Append("     i32.rem_s\n");
+            return sb.ToString();
         }
 
-        public string VisitChildren(EQUAL_TO node)
+        public string Visit(EQUAL_TO node)
         {
-            return VisitBinaryOperator("i32.eq", node);
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
+            sb.Append(Visit((dynamic)node[1]));
+
+            sb.Append("     i32.eq\n");
+            return sb.ToString();
         }
 
-        public string VisitChildren(NOT_EQUAL_TO node)
+        public string Visit(NOT_EQUAL_TO node)
         {
-            return VisitBinaryOperator("i32.ne", node);
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
+            sb.Append(Visit((dynamic)node[1]));
+
+            sb.Append("     i32.ne\n");
+            return sb.ToString();
         }
-        public string VisitChildren(LESS_THAN node)
+        public string Visit(LESS_THAN node)
         {
-            return VisitBinaryOperator("i32.lt_s", node);
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
+            sb.Append(Visit((dynamic)node[1]));
+
+            sb.Append("     i32.lt_s\n");
+            return sb.ToString();
         }
-        public string VisitChildren(LESS_EQUAL_THAN node)
+        public string Visit(LESS_EQUAL_THAN node)
         {
-            return VisitBinaryOperator("i32.le_s", node);
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
+            sb.Append(Visit((dynamic)node[1]));
+
+            sb.Append("     i32.le_s\n");
+            return sb.ToString();
         }
 
-        public string Visit(GREATHER_THAN node){
-            return VisitBinaryOperator("i32.gt_s", node);
+        public string Visit(GREATHER_THAN node)
+        {
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
+            sb.Append(Visit((dynamic)node[1]));
+
+            sb.Append("     i32.gt_s\n");
+            return sb.ToString();
         }
 
-        public string Visit(GREATHER_EQUAL_THAN node){
-            return VisitBinaryOperator("i32.ge_s", node);
+        public string Visit(GREATHER_EQUAL_THAN node)
+        {
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
+            sb.Append(Visit((dynamic)node[1]));
+
+            sb.Append("     i32.ge_s\n");
+            return sb.ToString();
         }
 
         public string Visit(Stmt_Incr node){
-
             var sb = StringBuilder();
             sb.Append((dynamic)node[0]);
             sb.Append("     i32.const 1\n");

@@ -2,6 +2,6 @@ make --dry-run --always-make --keep-going --print-directory
 make: Entering directory '/home/jrosas-pc/Documents/Compiladores_Project/Compiladores-project'
 mcs -out:quetzalDragon.exe Driver.cs Scanner.cs Token.cs TokenCategory.cs \
 Parser.cs SyntaxError.cs Node.cs SpecificNodes.cs SemanticVisitor1.cs \
-SemanticVisitor2.cs  SemanticError.cs Entry.cs
+SemanticVisitor2.cs  SemanticError.cs Entry.cs WatVisitor.cs
 make: Leaving directory '/home/jrosas-pc/Documents/Compiladores_Project/Compiladores-project'
  
