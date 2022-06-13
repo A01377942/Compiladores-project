@@ -265,6 +265,12 @@ namespace QuetzalDragon
             return sb.ToString();
         }
 
+        public string Visit(Elif node)
+        {
+            var sb = new StringBuilder();
+
+            return sb.ToString();
+        }
 
 
         public string Visit(Else node)
@@ -382,10 +388,10 @@ namespace QuetzalDragon
         }
 
         //Zab
-        public string Visit(String Node)
+        public string Visit(String node)
         {
             var sb = new StringBuilder();
-            var stringLexeme = Node.AnchorToken.Lexeme;
+            var stringLexeme = node.AnchorToken.Lexeme;
             var newString = stringLexeme.Substring(1, stringLexeme.Length - 2);
             var charArray = newString.ToCharArray();
             var index = 0;
@@ -394,6 +400,8 @@ namespace QuetzalDragon
             //Recorrer el String que esta en un arreglo de characters
             while (index < charArray.Length)
             {
+                //Console.WriteLine("char " + charArray[index] + " en index " + index);
+
                 //Si solamente es un character normal, ex 'A', agregar su codigo
                 if (charArray[index].ToString() != @"\")
                 {
@@ -411,10 +419,10 @@ namespace QuetzalDragon
                     //validar si se puede saber su valor completo, ex "\n", "\r".
                     if (index + 1 < charArray.Length)
                     {
-                        switch (charArray[index + 1])
+                        switch (charArray[index + 1].ToString())
                         {
                             //Si en realidad es "/n", entonces agrega su codigo
-                            case 'n':
+                            case "n":
                                 sb.Append("i32.const 10" + ";; " + @"\n" + "\n");
                                 sb.Append("call $add\n");
                                 sb.Append("drop\n");
@@ -423,7 +431,61 @@ namespace QuetzalDragon
                                 stringSize++;
                                 break;
                             //falta agregar mas casos
+                            case "r":
+                                sb.Append("   i32.const 13" + ";; " + @"\r" + "\n");
+                                sb.Append("call $add\n");
+                                sb.Append("drop\n");
+                                sb.Append("\n");
+                                index += 2;
+                                stringSize++;
+                                break;
+                            case "t":
+                                sb.Append("   i32.const 9" + ";; " + @"\t" + "\n");
+                                sb.Append("call $add\n");
+                                sb.Append("drop\n");
+                                sb.Append("\n");
+                                index += 2;
+                                stringSize++;
+                                break;
+                            case @"\":
+                                sb.Append("   i32.const 92" + ";; " + @"\\" + "\n");
+                                sb.Append("call $add\n");
+                                sb.Append("drop\n");
+                                sb.Append("\n");
+                                index += 2;
+                                stringSize++;
+                                break;
+                            case @"'":
+                                sb.Append("   i32.const 39" + ";; " + @"\'" + "\n");
+                                sb.Append("call $add\n");
+                                sb.Append("drop\n");
+                                sb.Append("\n");
+                                index += 2;
+                                stringSize++;
+                                break;
+                            case @"""":
+                                sb.Append("   i32.const 34" + ";; " + @"\""" + "\n");
+                                sb.Append("call $add\n");
+                                sb.Append("drop\n");
+                                sb.Append("\n");
+                                index += 2;
+                                stringSize++;
+                                break;
+                            case @"u":
+                                var inicio = index + 3;
+                                var numberString = stringLexeme.Substring(inicio, 6);
 
+
+                                int decValue = Convert.ToInt32(numberString, 16);
+
+                                sb.Append("   i32.const " + decValue + ";; " + numberString + "\n");
+                                sb.Append("call $add\n");
+                                sb.Append("drop\n");
+                                sb.Append("\n");
+
+                                index += 8;
+                                stringSize++;
+                                break;
                             //Si en realidad solo es el character "\" , entonces agregar su codigo
                             default:
                                 sb.Append("i32.const " + AsCodePoints(charArray[index].ToString())[0] + ";; " + charArray[index].ToString() + "\n");
@@ -585,37 +647,103 @@ namespace QuetzalDragon
             return sb.ToString();
         }
 
-        public string Visit(Stmt_Incr node){
-            var sb = StringBuilder();
-            sb.Append((dynamic)node[0]);
+        public string Visit(Stmt_Incr node)
+        {
+
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
             sb.Append("     i32.const 1\n");
             sb.Append("     i32.add\n");
             return sb.ToString();
         }
 
-        public string Visit(Stmt_Dec node){
-            var sb = StringBuilder();
-            sb.Append((dynamic)node[0]);
+        public string Visit(Stmt_Decr node)
+        {
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
             sb.Append("     i32.const 1\n");
             sb.Append("     i32.sub\n");
             return sb.ToString();
 
         }
 
-        public string Visit(Op_Unary node){
+        public string Visit(Op_Unary node)
+        {
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
+            return sb.ToString();
+        }
+
+        public string Visit(Boolean node)
+        {
+            var sb = new StringBuilder();
+            if (node.AnchorToken.Lexeme.Equals("true"))
+            {
+                sb.Append("     i32.const 1\n");
+            }
+            else
+            {
+                sb.Append("     i32.const 0\n");
+            }
+            return sb.ToString();
+        }
+
+        public string Visit(Character node)
+        {
+            var sb = new StringBuilder();
+            var stringLexeme = node.AnchorToken.Lexeme;
+            var newString = stringLexeme.Substring(1, stringLexeme.Length - 2);
+
+            if (newString.Length == 1)
+            {
+                sb.Append("   i32.const " + AsCodePoints(newString)[0] + ";; " + newString + "\n");
+            }
+            else
+            {
+                switch (newString[1].ToString())
+                {
+                    //Si en realidad es "/n", entonces agrega su codigo
+                    case "n":
+                        sb.Append("   i32.const 10" + ";; " + @"\n" + "\n");
+                        break;
+
+                    case "r":
+                        sb.Append("   i32.const 13" + ";; " + @"\r" + "\n");
+                        break;
+                    case "t":
+                        sb.Append("   i32.const 9" + ";; " + @"\t" + "\n");
+                        break;
+                    case @"\":
+                        sb.Append("   i32.const 92" + ";; " + @"\\" + "\n");
+                        break;
+                    case @"'":
+                        sb.Append("   i32.const 39" + ";; " + @"\'" + "\n");
+                        break;
+                    case @"""":
+                        sb.Append("   i32.const 34" + ";; " + @"\""" + "\n");
+                        break;
+                    case @"u":
+                        var numberString = stringLexeme.Substring(3, 6);
+                        int decValue = Convert.ToInt32(numberString, 16);
+                        sb.Append("   i32.const " + decValue + ";; " + numberString + "\n");
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return sb.ToString();
 
         }
 
-        public string Visit(Boolean node){
+        public string Visit(SUBSTRACTION node)
+        {
+            var sb = new StringBuilder();
+            sb.Append(Visit((dynamic)node[0]));
+            sb.Append(Visit((dynamic)node[1]));
 
-        }
-
-        public string Visit(Character node){
-
-        }
-
-        public string Visit(SUBSTRACTION node){
-
+            sb.Append("     i32.sub\n");
+            return sb.ToString();
         }
 
 
