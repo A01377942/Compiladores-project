@@ -528,6 +528,49 @@ namespace QuetzalDragon
             return VisitBinaryOperator("i32.le_s", node);
         }
 
+        public string Visit(GREATHER_THAN node){
+            return VisitBinaryOperator("i32.gt_s", node);
+        }
+
+        public string Visit(GREATHER_EQUAL_THAN node){
+            return VisitBinaryOperator("i32.ge_s", node);
+        }
+
+        public string Visit(Stmt_Incr node){
+
+            var sb = StringBuilder();
+            sb.Append((dynamic)node[0]);
+            sb.Append("     i32.const 1\n");
+            sb.Append("     i32.add\n");
+            return sb.ToString();
+        }
+
+        public string Visit(Stmt_Dec node){
+            var sb = StringBuilder();
+            sb.Append((dynamic)node[0]);
+            sb.Append("     i32.const 1\n");
+            sb.Append("     i32.sub\n");
+            return sb.ToString();
+
+        }
+
+        public string Visit(Op_Unary node){
+
+        }
+
+        public string Visit(Boolean node){
+
+        }
+
+        public string Visit(Character node){
+
+        }
+
+        public string Visit(SUBSTRACTION node){
+
+        }
+
+
 
         //Declara variables
         //funciona tanto para argumentos de funcion como para declaracion de variables.
