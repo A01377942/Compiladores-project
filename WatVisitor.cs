@@ -196,16 +196,83 @@ namespace QuetzalDragon
         public string Visit(Stmt_If node)
         {
             var sb = new StringBuilder();
+            var sb2 = new StringBuilder();
             //Se evalua el boleano
             sb.Append(Visit((dynamic)node[0]));
             sb.Append("   if\n");
             //sb.Append(VisitChildren(node));
+
+
             //statement list
             sb.Append(Visit((dynamic)node[1]));
-            //Else_If_List
-            sb.Append(Visit((dynamic)node[2]));
-            //Else
-            sb.Append(Visit((dynamic)node[3]));
+
+            var Else_if_nodo = (Else_If_List)(dynamic)node[2];
+            var elseChindrens = (Else)(dynamic)node[3];
+
+            if (Else_if_nodo.NumberChildrens >= 1)
+            {
+                //Console.WriteLine(Else_if_nodo.NumberChildrens);
+
+                var index = 0;
+                string[] arrayElifs = new string[Else_if_nodo.NumberChildrens];
+                foreach (var n in Else_if_nodo)
+                {
+                    arrayElifs[index] = Visit((dynamic)n);
+                    index++;
+                }
+
+                // //Else_If_List
+                var actualStr = "";
+                sb.Append("   else\n");
+                for (int i = arrayElifs.Length - 1; i >= 0; i--)
+                {
+
+                    if (arrayElifs.Length - 1 == i)
+                    {
+
+                        sb2.Append(arrayElifs[i]);
+                        if (elseChindrens.NumberChildrens >= 1)
+                        {
+                            sb2.Append("else\n");
+                            sb2.Append(Visit((dynamic)node[3]));
+                        }
+                        sb2.Append("end\n");
+                        actualStr = sb2.ToString();
+                        sb2.Clear();
+                    }
+                    else
+                    {
+
+                        sb2.Append(arrayElifs[i]);
+                        sb2.Append("else\n");
+                        sb2.Append(actualStr);
+                        sb2.Append("end\n");
+                        actualStr = sb2.ToString();
+                        sb2.Clear();
+                    }
+                }
+                sb.Append(actualStr);
+
+
+
+
+            }
+            else
+            {
+                //var elseChindrens = (Else)(dynamic)node[3];
+                if (elseChindrens.NumberChildrens >= 1)
+                {
+                    sb.Append("else\n");
+                    sb.Append(Visit((dynamic)node[3]));
+                }
+
+            }
+
+
+
+
+
+
             sb.Append("   end\n");
             return sb.ToString();
         }
@@ -274,7 +341,12 @@ namespace QuetzalDragon
         public string Visit(Elif node)
         {
             var sb = new StringBuilder();
+            //Se evalua el boleano
+            sb.Append(Visit((dynamic)node[0]));
+            sb.Append("   if\n");
 
+            //statement list
+            sb.Append(Visit((dynamic)node[1]));
             return sb.ToString();
         }
 
@@ -282,7 +354,7 @@ namespace QuetzalDragon
         public string Visit(Else node)
         {
             var sb = new StringBuilder();
-
+            sb.Append(Visit((dynamic)node[0]));
             return sb.ToString();
         }
 
@@ -314,6 +386,12 @@ namespace QuetzalDragon
         //
         public string Visit(Identifier node)
         {
+            //Checar si es variable local
+            if (Fgst[currentFunction].Lst.Contains(node.AnchorToken.Lexeme))
+            {
+                return $"    local.get ${node.AnchorToken.Lexeme}\n";
+            }
+
             //Checar si es variable global
             if (Vgst.Contains(node.AnchorToken.Lexeme))
             {
@@ -778,8 +856,19 @@ namespace QuetzalDragon
         public string Visit(SUBSTRACTION node)
         {
             var sb = new StringBuilder();
-            sb.Append(Visit((dynamic)node[0]));
-            sb.Append(Visit((dynamic)node[1]));
+
+            if (node.NumberChildrens == 1)
+            {
+
+                sb.Append(Visit((dynamic)node[0]));
+
+            }
+            else
+            {
+                sb.Append(Visit((dynamic)node[0]));
+                sb.Append(Visit((dynamic)node[1]));
+            }
+
 
             sb.Append("     i32.sub\n");
             return sb.ToString();

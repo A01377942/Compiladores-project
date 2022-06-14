@@ -23,7 +23,8 @@ namespace QuetzalDragon
     }
 
     class Stmt_List : Node { }
-    class Fun_Def : Node {
+    class Fun_Def : Node
+    {
         public int NumberChildrens
         {
             get
@@ -33,14 +34,15 @@ namespace QuetzalDragon
             }
 
         }
-     }
+    }
     class Assign : Node { }
 
     class IntLiteral : Node { }
 
-    class FUN_CALL : Node {
-      
-         public bool isStatement
+    class FUN_CALL : Node
+    {
+
+        public bool isStatement
         {
             get;
             set;
@@ -48,7 +50,7 @@ namespace QuetzalDragon
 
 
 
-     }
+    }
     class Expr_List : Node
     {
         public int NumberChildrens
@@ -69,11 +71,11 @@ namespace QuetzalDragon
 
     class Stmt_Loop : Node { }
 
- 
+
 
     //--------------------------------
     //Jonathan
-    
+
     class MULTIPLICATION : Node { }
 
     class Stmt_Break : Node { }
@@ -84,8 +86,9 @@ namespace QuetzalDragon
 
     class Expr_Or : Node { }
 
-    class PLUS : Node {
-                public int NumberChildrens
+    class PLUS : Node
+    {
+        public int NumberChildrens
         {
             get
             {
@@ -94,8 +97,8 @@ namespace QuetzalDragon
             }
 
         }
-     }
-    
+    }
+
 
     class DIVISION : Node { }
 
@@ -108,14 +111,14 @@ namespace QuetzalDragon
     class NOT_EQUAL_TO : Node { }
     class LESS_THAN : Node { }
     class LESS_EQUAL_THAN : Node { }
- 
 
 
 
 
 
 
- 
+
+
     //-------------------------
     //Emiliano
 
@@ -126,11 +129,33 @@ namespace QuetzalDragon
 
     class Stmt_Decr : Node { }
 
-    class Else_If_List : Node { }
+    class Else_If_List : Node
+    {
+        public int NumberChildrens
+        {
+            get
+            {
+
+                return children.Count;
+            }
+
+        }
+    }
 
     class Elif : Node { }
 
-    class Else : Node { }
+    class Else : Node
+    {
+        public int NumberChildrens
+        {
+            get
+            {
+
+                return children.Count;
+            }
+
+        }
+    }
 
     class Op_Unary : Node { }
 
@@ -141,7 +166,8 @@ namespace QuetzalDragon
 
     class String : Node { }
 
-    class SUBSTRACTION : Node {
+    class SUBSTRACTION : Node
+    {
         public int NumberChildrens
         {
             get
@@ -151,5 +177,5 @@ namespace QuetzalDragon
             }
 
         }
-     }
+    }
 }
